@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "ESnext",
+      "outDir": "dist", //optionally use “” to not use an output folder
+      "sourceMap": true,
+      "strict": true,
+      "strictPropertyInitialization": false,
+      "moduleResolution": "nodenext",
+      "module":"NodeNext"
+    },
+    "include": ["src/**/*"],
+   }
