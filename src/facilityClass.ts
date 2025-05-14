@@ -7,6 +7,7 @@ export abstract class Facility{
     protected _powerConsumption: number = 0;
     protected _typeOf: string;
     protected _monthsSinceBuilt: number = 0;
+    protected _hasPower: boolean = false;
 
     constructor(x: number, y: number, buildCost: number, powerConsumption: number, typeOf: string){
         this._x = x;
@@ -22,6 +23,7 @@ export abstract class Facility{
     public get powerConsumption(): number { return this._powerConsumption; }
     public get typeOf(): string { return this._typeOf; }
     public get monthsSinceBuilt(): number { return this._monthsSinceBuilt; }
+    public get hasPower(): boolean { return this._hasPower; }
 
     public abstract calcMonthlyRevenue(): number;
     public abstract calcMonthlyPollution(): number;
@@ -29,5 +31,9 @@ export abstract class Facility{
 
     public incrementMonths(): void {
         this._monthsSinceBuilt++;
+    }
+
+    public updatePowerStatus(hasPower: boolean): void {
+        this._hasPower = hasPower;
     }
 }

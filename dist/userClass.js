@@ -1,140 +1,112 @@
-import { Grid } from "./gridClass";
-import { Facility } from "./facilityClass";
-import {
-    Residence,
-    LuxuryResidence,
-    ComfortableResidence,
-    AffordableResidence,
-} from "./residenceClass";
-import {
-    EmergencyServices,
-    EducationCenter,
-    MedicalCenter,
-    GovernmentFacility,
-    PowerPlant,
-} from "./essentialsClass";
-import {
-    IndustrialFacility,
-    Factory,
-    EnvironmentalFacility,
-} from "./industrialClass";
-
-export class User {
-    private _grid: Grid;
-    private _usedCoords: number[][] = [];
-    private _buildingsBuilt: number = 0;
-    private _maxBuildings: number;
-    private _userMoney: number = 5000000000;
-    private _currentTime: number = 0;
-    private _totalPopulation: number = 0;
-    private _totalPollution: number = 0;
-    private _hasPlanetaryDefense: boolean = false;
-    private _isGameOver: boolean = false;
-    private _totalPowerGenerated: number = 0;
-    private _totalPowerUsed: number = 0;
-
-    constructor(rows: number, col: number) {
-        this._grid = new Grid(rows, col);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
+const gridClass_1 = require("./gridClass");
+const residenceClass_1 = require("./residenceClass");
+const essentialsClass_1 = require("./essentialsClass");
+const industrialClass_1 = require("./industrialClass");
+class User {
+    _grid;
+    _usedCoords = [];
+    _buildingsBuilt = 0;
+    _maxBuildings;
+    _userMoney = 5000000000;
+    _currentTime = 0;
+    _totalPopulation = 0;
+    _totalPollution = 0;
+    _hasPlanetaryDefense = false;
+    _isGameOver = false;
+    _totalPowerGenerated = 0;
+    _totalPowerUsed = 0;
+    constructor(rows, col) {
+        this._grid = new gridClass_1.Grid(rows, col);
         this._maxBuildings = this._grid.rows * this._grid.columns;
     }
-
     // Getters
-    public get grid(): Grid {
+    get grid() {
         return this._grid;
     }
-    public get usedCoords(): number[][] {
+    get usedCoords() {
         return this._usedCoords;
     }
-    public get buildingsBuilt(): number {
+    get buildingsBuilt() {
         return this._buildingsBuilt;
     }
-    public get maxBuildings(): number {
+    get maxBuildings() {
         return this._maxBuildings;
     }
-    public get userMoney(): number {
+    get userMoney() {
         return this._userMoney;
     }
-    public get currentTime(): number {
+    get currentTime() {
         return this._currentTime;
     }
-    public get totalPopulation(): number {
+    get totalPopulation() {
         return this._totalPopulation;
     }
-    public get totalPollution(): number {
+    get totalPollution() {
         return this._totalPollution;
     }
-    public get hasPlanetaryDefense(): boolean {
+    get hasPlanetaryDefense() {
         return this._hasPlanetaryDefense;
     }
-    public get isGameOver(): boolean {
+    get isGameOver() {
         return this._isGameOver;
     }
-    public get powerBalance(): number {
+    get powerBalance() {
         return this._totalPowerGenerated - this._totalPowerUsed;
     }
-
-    public calculateMonthlyUpdates(): void {
+    calculateMonthlyUpdates() {
         // add time
         this._currentTime++;
-
         // check for planetary defense and disasters
         // check for planetary defense
         this._hasPlanetaryDefense =
             this._grid.countFacilities("PlanetaryDefense") > 0;
-
         if (!this._hasPlanetaryDefense) {
             this.checkForDisasters();
-            if (this._isGameOver) return;
+            if (this._isGameOver)
+                return;
         }
-
         // get all facilities
         const allFacilities = this.getAllFacilities();
-
         // update power stats
         this.updatePowerStats();
-
         // reset totals for this month
         this._totalPopulation = 0;
         this._totalPollution = 0;
         let monthlyBalance = 0;
-
         // process each facility needs
         allFacilities.forEach((facility) => {
             // add facility age
             facility.incrementMonths();
-
             // calcualte monthly revenue and maintenance cost
             const revenue = facility.calcMonthlyRevenue();
             const maintenance = facility.calcMaintenanceCost();
             monthlyBalance += revenue - maintenance;
-
             // special facility needs
-            if (facility instanceof Residence) {
+            if (facility instanceof residenceClass_1.Residence) {
                 facility.updatePopulation(this._grid);
                 this._totalPopulation += facility.currPopulation;
             }
-
             // reset pollution before calculating
             let monthlyPollution = 0;
-
             // sum pollution from all polluting facilities
             allFacilities.forEach((facility) => {
-                if (!(facility instanceof EnvironmentalFacility)) {
+                if (!(facility instanceof industrialClass_1.EnvironmentalFacility)) {
                     monthlyPollution += facility.calcMonthlyPollution();
                 }
             });
-
             // calculate total pollution reduction from EnvironmentalFacilities
             let totalReduction = 0;
             allFacilities.forEach((facility) => {
-                if (facility instanceof EnvironmentalFacility) {
+                if (facility instanceof industrialClass_1.EnvironmentalFacility) {
                     const radius = facility.pollutionReductionRadius;
                     const x = facility.x;
                     const y = facility.y;
-
                     let localPollution = 0;
                     allFacilities.forEach((other) => {
-                        if (!(other instanceof EnvironmentalFacility)) {
+                        if (!(other instanceof industrialClass_1.EnvironmentalFacility)) {
                             const dx = other.x - x;
                             const dy = other.y - y;
                             const dist = Math.sqrt(dx * dx + dy * dy);
@@ -143,91 +115,70 @@ export class User {
                             }
                         }
                     });
-
                     const reduction = Math.min(localPollution, 30000);
                     totalReduction += reduction;
                 }
             });
-
             // final pollution value this month
-            this._totalPollution = Math.max(
-                0,
-                monthlyPollution - totalReduction
-            );
-
-            if (
-                facility instanceof IndustrialFacility &&
-                !facility.isNearPowerPlant(this._grid)
-            ) {
+            this._totalPollution = Math.max(0, monthlyPollution - totalReduction);
+            if (facility instanceof industrialClass_1.IndustrialFacility &&
+                !facility.isNearPowerPlant(this._grid)) {
                 facility.updatePowerStatus(false);
             }
         });
-
         // update user money
         this._userMoney += monthlyBalance;
-
         // ensure pollution doesn't go negative
         this._totalPollution = Math.max(0, this._totalPollution);
-
         // check if user ran out of money
         if (this._userMoney < 0) {
             this._isGameOver = true;
         }
     }
-
-    private updatePowerStats(): void {
+    updatePowerStats() {
         const allFacilities = this.getAllFacilities();
-
         this._totalPowerGenerated = 0;
         for (const facility of allFacilities) {
-            if (facility instanceof PowerPlant) {
+            if (facility instanceof essentialsClass_1.PowerPlant) {
                 this._totalPowerGenerated += facility.powerOutput;
             }
         }
-
-        const consumers = allFacilities.filter(
-            (f) => !(f instanceof PowerPlant)
-        );
-
+        const consumers = allFacilities.filter((f) => !(f instanceof essentialsClass_1.PowerPlant));
         const sortedConsumers = consumers.sort((a, b) => {
             let priorityA = 3;
             let priorityB = 3;
-
-            if (a instanceof Residence) priorityA = 1;
+            if (a instanceof residenceClass_1.Residence)
+                priorityA = 1;
             else if (a.typeOf.includes("Center") || a.typeOf.includes("Store"))
                 priorityA = 2;
-
-            if (b instanceof Residence) priorityB = 1;
+            if (b instanceof residenceClass_1.Residence)
+                priorityB = 1;
             else if (b.typeOf.includes("Center") || b.typeOf.includes("Store"))
                 priorityB = 2;
-
             return priorityA - priorityB;
         });
-
         let powerLeft = this._totalPowerGenerated;
         for (let i = 0; i < sortedConsumers.length; i++) {
             const facility = sortedConsumers[i];
             if (powerLeft >= facility.powerConsumption) {
                 facility.updatePowerStatus(true);
                 powerLeft -= facility.powerConsumption;
-            } else {
+            }
+            else {
                 facility.updatePowerStatus(false);
             }
         }
-
         this._totalPowerUsed = this._totalPowerGenerated - powerLeft;
     }
-
-    public getFacilityAt(rows: number, col: number): Facility | null {
+    getFacilityAt(rows, col) {
         const facility = this._grid.getFacility(rows, col);
         if (facility === null) {
             return null;
         }
         return facility;
     }
-
-    public getFacilitiesOfType(type: string): Facility[] {
-        const facilities: Facility[] = [];
+    getFacilitiesOfType(type) {
+        const facilities = [];
         for (let i = 0; i < this._grid.rows; i++) {
             for (let j = 0; j < this._grid.columns; j++) {
                 const facility = this._grid.getFacility(i, j);
@@ -238,9 +189,8 @@ export class User {
         }
         return facilities;
     }
-
-    public getAllFacilities(): Facility[] {
-        const facilities: Facility[] = [];
+    getAllFacilities() {
+        const facilities = [];
         for (let i = 0; i < this._grid.rows; i++) {
             for (let j = 0; j < this._grid.columns; j++) {
                 const facility = this._grid.getFacility(i, j);
@@ -251,23 +201,19 @@ export class User {
         }
         return facilities;
     }
-
-    public calculateScore(): number {
+    calculateScore() {
         let happyPop = 0;
         let contentPop = 0;
-
         this.getAllFacilities()
             .filter((facility) => facility.typeOf.includes("Residence"))
             .forEach((residence) => {
-                const res = residence as Residence;
-                happyPop += res.happyPopulation;
-                contentPop += res.contentPopulation;
-            });
-
+            const res = residence;
+            happyPop += res.happyPopulation;
+            contentPop += res.contentPopulation;
+        });
         return 3 * happyPop + contentPop - this._totalPollution;
     }
-
-    private checkForDisasters(): void {
+    checkForDisasters() {
         if (Math.random() < 0.01) {
             // asteroid
             this._isGameOver = true;
@@ -277,77 +223,60 @@ export class User {
             this._isGameOver = true;
         }
     }
-
     // Building methods
-
-    public canAfford(cost: number): boolean {
+    canAfford(cost) {
         return this._userMoney >= cost;
     }
-
     // public buildStore(x: number, y: number): boolean {
     //     return this.buildFacility(new Store(x, y), 2000000);
     // }
-
     // public buildRestaurant(x: number, y: number): boolean {
     //     return this.buildFacility(new Restaurant(x, y), 250000);
     // }
-
     // public buildOffice(x: number, y: number): boolean {
     //     return this.buildFacility(new Office(x, y), 3000000);
     // }
-
     // public buildWarehouse(x: number, y: number): boolean {
     //     return this.buildFacility(new Warehouse(x, y), 50000000);
     // }
-
-    public buildEnvFacility(x: number, y: number): boolean {
-        return this.buildFacility(new EnvironmentalFacility(x, y), 200000000);
+    buildEnvFacility(x, y) {
+        return this.buildFacility(new industrialClass_1.EnvironmentalFacility(x, y), 200000000);
     }
-
-    public buildFactory(x: number, y: number): boolean {
-        return this.buildFacility(new Factory(x, y), 50000000);
+    buildFactory(x, y) {
+        return this.buildFacility(new industrialClass_1.Factory(x, y), 50000000);
     }
-
-    public buildPP(x: number, y: number): boolean {
-        return this.buildFacility(new PowerPlant(x, y), 500000000);
+    buildPP(x, y) {
+        return this.buildFacility(new essentialsClass_1.PowerPlant(x, y), 500000000);
     }
-
-    public buildEduCenter(x: number, y: number): boolean {
-        return this.buildFacility(new EducationCenter(x, y), 500000000);
+    buildEduCenter(x, y) {
+        return this.buildFacility(new essentialsClass_1.EducationCenter(x, y), 500000000);
     }
-
-    public buildMedCenter(x: number, y: number): boolean {
-        return this.buildFacility(new MedicalCenter(x, y), 1000000000);
+    buildMedCenter(x, y) {
+        return this.buildFacility(new essentialsClass_1.MedicalCenter(x, y), 1000000000);
     }
-
-    public buildEmergencyServ(x: number, y: number): boolean {
-        return this.buildFacility(new EmergencyServices(x, y), 100000000);
+    buildEmergencyServ(x, y) {
+        return this.buildFacility(new essentialsClass_1.EmergencyServices(x, y), 100000000);
     }
-
-    public buildGovernment(x: number, y: number): boolean {
-        return this.buildFacility(new GovernmentFacility(x, y), 100000000);
+    buildGovernment(x, y) {
+        return this.buildFacility(new essentialsClass_1.GovernmentFacility(x, y), 100000000);
     }
-
-    public buildLuxury(x: number, y: number): boolean {
-        return this.buildFacility(new LuxuryResidence(x, y), 1000000000);
+    buildLuxury(x, y) {
+        return this.buildFacility(new residenceClass_1.LuxuryResidence(x, y), 1000000000);
     }
-
-    public buildComfort(x: number, y: number): boolean {
-        return this.buildFacility(new ComfortableResidence(x, y), 500000000);
+    buildComfort(x, y) {
+        return this.buildFacility(new residenceClass_1.ComfortableResidence(x, y), 500000000);
     }
-
-    public buildAffordable(x: number, y: number): boolean {
-        return this.buildFacility(new AffordableResidence(x, y), 50000000);
+    buildAffordable(x, y) {
+        return this.buildFacility(new residenceClass_1.AffordableResidence(x, y), 50000000);
     }
-
-    private buildFacility(facility: Facility, cost: number): boolean {
+    buildFacility(facility, cost) {
         if (!this.canAfford(cost)) {
             return false;
         }
         if (this._grid.getFacility(facility.x, facility.y) !== null) {
             return false;
         }
-        if (facility instanceof Residence) {
+        if (facility instanceof residenceClass_1.Residence) {
             if (!facility.canBeBuilt(this._grid)) {
                 return false;
             }
@@ -358,3 +287,5 @@ export class User {
         return this._grid.addFacility(facility, facility.x, facility.y);
     }
 }
+exports.User = User;
+//# sourceMappingURL=userClass.js.map

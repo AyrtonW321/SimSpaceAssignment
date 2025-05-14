@@ -92,13 +92,15 @@ export class LuxuryResidence extends Residence {
     }
 
     public calcMonthlyRevenue(): number {
+        if (!this.hasPower) return 0;
         const thousandsOfResidents = Math.floor(this.currPopulation / 1000);
         return thousandsOfResidents * 15000000;
     }
 
     public calcMaintenanceCost(): number {
         const baseCost = 10000000;
-        const perThousandCost = Math.floor(this.currPopulation / 1000) * 1000000;
+        const perThousandCost =
+            Math.floor(this.currPopulation / 1000) * 1000000;
         return baseCost + perThousandCost;
     }
 
@@ -107,24 +109,38 @@ export class LuxuryResidence extends Residence {
     }
 
     public updatePopulation(grid: Grid): void {
-        this._hasStore = grid.hasFacilityTypeInRadius(this.x, this.y, 5, "Store");
-        this._hasRestaurant = grid.hasFacilityTypeInRadius(this.x, this.y, 3, "Restaurant");
+        this._hasStore = grid.hasFacilityTypeInRadius(
+            this.x,
+            this.y,
+            5,
+            "Store"
+        );
+        this._hasRestaurant = grid.hasFacilityTypeInRadius(
+            this.x,
+            this.y,
+            3,
+            "Restaurant"
+        );
 
         if (this._hasStore && this._hasRestaurant) {
             this._currMaxPopulation = this._absoluteMaxPopulation;
         } else {
             this._currMaxPopulation = 5000;
         }
-       
-        if (super.hasRequiredServices(grid) && this._currPopulation < this._currMaxPopulation) {
+
+        if (
+            super.hasRequiredServices(grid) &&
+            this._currPopulation < this._currMaxPopulation
+        ) {
             const monthlyGrowth = Math.floor(this._currMaxPopulation * 0.1);
             this._currPopulation = Math.min(
                 this._currPopulation + monthlyGrowth,
                 this._currMaxPopulation
             );
-            
+
             this._happyPopulation = Math.floor(this._currPopulation * 0.5);
-            this._contentPopulation = this._currPopulation - this._happyPopulation;
+            this._contentPopulation =
+                this._currPopulation - this._happyPopulation;
         }
 
         this.incrementMonths;
@@ -133,9 +149,11 @@ export class LuxuryResidence extends Residence {
     public get luxuryAmenitiesStatus(): boolean {
         return this._hasStore && this._hasRestaurant;
     }
-    
+
     public get luxuryAmenitiesStatusDescription(): string {
-        return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${this._hasRestaurant ? "✅" : "❌"}`;
+        return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${
+            this._hasRestaurant ? "✅" : "❌"
+        }`;
     }
 }
 
@@ -150,6 +168,7 @@ export class ComfortableResidence extends Residence {
     }
 
     public calcMonthlyRevenue(): number {
+        if (!this.hasPower) return 0;
         const thousandsOfResidents = Math.floor(this.currPopulation / 1000);
         return thousandsOfResidents * 1000000;
     }
@@ -165,20 +184,34 @@ export class ComfortableResidence extends Residence {
     }
 
     public updatePopulation(grid: Grid): void {
-        this._hasStore = grid.hasFacilityTypeInRadius(this.x, this.y, 5, "Store");
-        this._hasRestaurant = grid.hasFacilityTypeInRadius(this.x, this.y, 3, "Restaurant");
+        this._hasStore = grid.hasFacilityTypeInRadius(
+            this.x,
+            this.y,
+            5,
+            "Store"
+        );
+        this._hasRestaurant = grid.hasFacilityTypeInRadius(
+            this.x,
+            this.y,
+            3,
+            "Restaurant"
+        );
 
         this._currMaxPopulation = this._absoluteMaxPopulation;
-       
-        if (super.hasRequiredServices(grid) && this._currPopulation < this._currMaxPopulation) {
+
+        if (
+            super.hasRequiredServices(grid) &&
+            this._currPopulation < this._currMaxPopulation
+        ) {
             const monthlyGrowth = Math.floor(this._currMaxPopulation * 0.1);
             this._currPopulation = Math.min(
                 this._currPopulation + monthlyGrowth,
                 this._currMaxPopulation
             );
-            
+
             this._happyPopulation = Math.floor(this._currPopulation * 0.25);
-            this._contentPopulation = this._currPopulation - this._happyPopulation;
+            this._contentPopulation =
+                this._currPopulation - this._happyPopulation;
         }
 
         this.incrementMonths();
@@ -187,9 +220,11 @@ export class ComfortableResidence extends Residence {
     public get comfortableAmenitiesStatus(): boolean {
         return this._hasStore && this._hasRestaurant;
     }
-    
+
     public get comfortableAmenitiesStatusDescription(): string {
-        return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${this._hasRestaurant ? "✅" : "❌"}`;
+        return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${
+            this._hasRestaurant ? "✅" : "❌"
+        }`;
     }
 }
 
@@ -204,6 +239,7 @@ export class AffordableResidence extends Residence {
     }
 
     public calcMonthlyRevenue(): number {
+        if (!this.hasPower) return 0;
         const thousandsOfResidents = Math.floor(this.currPopulation / 1000);
         return thousandsOfResidents * 10000;
     }
@@ -219,20 +255,34 @@ export class AffordableResidence extends Residence {
     }
 
     public updatePopulation(grid: Grid): void {
-        this._hasStore = grid.hasFacilityTypeInRadius(this.x, this.y, 5, "Store");
-        this._hasRestaurant = grid.hasFacilityTypeInRadius(this.x, this.y, 3, "Restaurant");
+        this._hasStore = grid.hasFacilityTypeInRadius(
+            this.x,
+            this.y,
+            5,
+            "Store"
+        );
+        this._hasRestaurant = grid.hasFacilityTypeInRadius(
+            this.x,
+            this.y,
+            3,
+            "Restaurant"
+        );
 
         this._currMaxPopulation = this._absoluteMaxPopulation;
-       
-        if (super.hasRequiredServices(grid) && this._currPopulation < this._currMaxPopulation) {
+
+        if (
+            super.hasRequiredServices(grid) &&
+            this._currPopulation < this._currMaxPopulation
+        ) {
             const monthlyGrowth = Math.floor(this._currMaxPopulation * 0.1);
             this._currPopulation = Math.min(
                 this._currPopulation + monthlyGrowth,
                 this._currMaxPopulation
             );
-            
+
             this._happyPopulation = Math.floor(this._currPopulation * 0.1);
-            this._contentPopulation = this._currPopulation - this._happyPopulation;
+            this._contentPopulation =
+                this._currPopulation - this._happyPopulation;
         }
 
         this.incrementMonths();
@@ -241,8 +291,10 @@ export class AffordableResidence extends Residence {
     public get affordableAmenitiesStatus(): boolean {
         return this._hasStore && this._hasRestaurant;
     }
-    
+
     public get affordableAmenitiesStatusDescription(): string {
-        return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${this._hasRestaurant ? "✅" : "❌"}`;
+        return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${
+            this._hasRestaurant ? "✅" : "❌"
+        }`;
     }
 }
