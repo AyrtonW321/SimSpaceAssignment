@@ -18,6 +18,7 @@ import {
     Factory,
     EnvironmentalFacility,
 } from "./industrialClass";
+import { PlanetaryDefense } from "./PlanetaryDefense";
 
 export class User {
     private _grid: Grid;
@@ -133,13 +134,13 @@ export class User {
                     const y = facility.y;
 
                     let localPollution = 0;
-                    allFacilities.forEach((other) => {
-                        if (!(other instanceof EnvironmentalFacility)) {
-                            const dx = other.x - x;
-                            const dy = other.y - y;
+                    allFacilities.forEach((envFacility) => {
+                        if (!(envFacility instanceof EnvironmentalFacility)) {
+                            const dx = envFacility.x - x;
+                            const dy = envFacility.y - y;
                             const dist = Math.sqrt(dx * dx + dy * dy);
                             if (dist <= radius) {
-                                localPollution += other.calcMonthlyPollution();
+                                localPollution += envFacility.calcMonthlyPollution();
                             }
                         }
                     });
@@ -172,6 +173,7 @@ export class User {
         // check if user ran out of money
         if (this._userMoney < 0) {
             this._isGameOver = true;
+            alert("Game over. Your final score: " + this.calculateScore());
         }
     }
 
@@ -271,10 +273,12 @@ export class User {
         if (Math.random() < 0.01) {
             // asteroid
             this._isGameOver = true;
+            alert("Game over. Your final score: " + this.calculateScore());
         }
         if (Math.random() < 0.01) {
             // alien
             this._isGameOver = true;
+            alert("Game over. Your final score: " + this.calculateScore());
         }
     }
 
@@ -338,6 +342,13 @@ export class User {
 
     public buildAffordable(x: number, y: number): boolean {
         return this.buildFacility(new AffordableResidence(x, y), 50000000);
+    }
+    
+    public buildPlanetaryDefense(x: number, y: number): boolean {
+        if (this._hasPlanetaryDefense) {
+            return false;
+        }
+        return this.buildFacility(new PlanetaryDefense(x, y), 1000000000000);
     }
 
     private buildFacility(facility: Facility, cost: number): boolean {
