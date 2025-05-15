@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Calistoga&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.container {
+  width: 100%;
+  max-width: 650px;
+  margin: 100px auto 40px;
+  padding: 30px 20px;
+  text-align: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-family: 'Cal Sans', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: #1c1c1c;
+  margin-bottom: 30px;
+}
+
+.settingsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.gridPresets {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: nowrap;
+  gap: 15px;
+}
+
+.gridPresets h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: auto;
+  white-space: nowrap;
+  margin: 0;
+  padding-right: 10px;
+}
+
+.gridPresetsContent {
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
+  gap: 10px;
+}
+
+.gridButton {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  height: 150px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 2px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.gridButton:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gridButton canvas {
+  border: 1px solid black;
+}
+
+.customGrid {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: nowrap;
+  gap: 15px;
+}
+
+.customGrid h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin: 0;
+  padding-right: 10px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+input[type="number"] {
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+input[type="number"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+#startButton {
+  margin-top: 30px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#startButton:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}

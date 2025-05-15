@@ -1,12 +1,11 @@
 {
-    "compilerOptions": {
-      "target": "ESnext",
-      "outDir": "dist", //optionally use “” to not use an output folder
-      "sourceMap": true,
-      "strict": true,
-      "strictPropertyInitialization": false,
-      "moduleResolution": "nodenext",
-      "module":"NodeNext"
-    },
-    "include": ["src/**/*"],
-   }
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "dist", //optionally use “” to not use an output folder
+    "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "module": "ES6"
+  },
+  "include": ["src/**/*"],
+ }
