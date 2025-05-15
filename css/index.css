@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Calistoga&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.infoContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  min-width: 200px;
+  text-align: left;
+}
+
+.infoItem {
+  white-space: nowrap;
+}
+
+.gridContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 200px;
+}
+
+.selectorContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.typeButtonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.typeButton {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  width: 150px;
+  text-align: center;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid #ccc;
+  font-weight: 600;
+  color: #333;
+}
+
+.typeButton:hover {
+  background-color: #d1dce5;
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.typeButton.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.selectorButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.selectorButton {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  height: 150px;
+  width: 150px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.selectorButton:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.selectorButton img {
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+
+.selectorButton:hover img {
+  transform: scale(1.05);
+}

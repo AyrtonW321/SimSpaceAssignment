@@ -1,11 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SimSpace</title>
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="icon" href="./Imgs/logopng.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
-    
+    <div class="infoContainer">
+        <div class="infoItem">Time: 00:00</div>
+        <div class="infoItem">Money: $0</div>
+        <div class="infoItem">Population: 0</div>
+        <div class="infoItem">Score: 0</div>
+    </div>
+
+    <div class="gridContainer">
+        <canvas id="gridCanvas" width="1000" height="1000"></canvas>
+    </div>
+
+    <div class="selectorContainer">
+        <div class="typeButtonContainer">
+            <div class="typeButtonContainer">
+                <button type="button" class="typeButton" data-type="essential">Essential Services</button>
+                <button type="button" class="typeButton" data-type="residential">Residential</button>
+                <button type="button" class="typeButton" data-type="industrial">Industrial</button>
+                <button type="button" class="typeButton" data-type="commercial">Commercial</button>
+                <button type="button" class="typeButton" data-type="defense">Planetary Defense System</button>
+            </div>
+
+        </div>
+        <div class="selectorButtonContainer">
+            <button type="button" class="selectorButton"></button>
+        </div>
+    </div>
+
 </body>
+<script src="../dist/user.js" defer></script>
+
 </html>
