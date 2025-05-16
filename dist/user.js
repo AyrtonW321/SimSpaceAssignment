@@ -49,7 +49,6 @@ function drawGrid() {
 }
 function toggleSelected(clickedSquare) {
     clickedSquare.color = clickedSquare.color === "#ebebeb" ? "green" : "#ebebeb";
-    console.log(grid);
 }
 canvas === null || canvas === void 0 ? void 0 : canvas.addEventListener("click", function (event) {
     if (!canvas)
