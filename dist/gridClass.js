@@ -1,10 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Grid = void 0;
-class Grid {
-    _cells;
-    _columns;
-    _rows;
+export class Grid {
     constructor(rows, columns) {
         this._rows = this.rowsCheck(rows);
         this._columns = this.columnCheck(columns);
@@ -58,7 +52,7 @@ class Grid {
         for (let i = 0; i < this._cells.length; i++) {
             for (let j = 0; j < this._cells[i].length; j++) {
                 const cell = this._cells[i][j];
-                if (cell?.typeOf.includes(type)) {
+                if (cell === null || cell === void 0 ? void 0 : cell.typeOf.includes(type)) {
                     count++;
                 }
             }
@@ -77,7 +71,10 @@ class Grid {
         const maxY = Math.min(this._columns - 1, col + radius);
         for (let i = minX; i <= maxX; i++) {
             for (let j = minY; j <= maxY; j++) {
-                if (this._cells[i][j] !== null) {
+                const dx = i - rows;
+                const dy = j - col;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist <= radius && this._cells[i][j] !== null) {
                     facilities.push(this._cells[i][j]);
                 }
             }
@@ -103,5 +100,4 @@ class Grid {
         return this._columns;
     }
 }
-exports.Grid = Grid;
 //# sourceMappingURL=gridClass.js.map

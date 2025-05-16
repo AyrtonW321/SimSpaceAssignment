@@ -1,13 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AffordableResidence = exports.ComfortableResidence = exports.LuxuryResidence = exports.Residence = void 0;
-const facilityClass_1 = require("./facilityClass");
-class Residence extends facilityClass_1.Facility {
-    _happyPopulation = 0;
-    _contentPopulation = 0;
-    _currPopulation = 0;
-    _currMaxPopulation = 0;
-    _monthsSinceBuilt = 0;
+import { Facility } from "./facilityClass";
+export class Residence extends Facility {
     // Getters
     get happyPopulation() {
         return this._happyPopulation;
@@ -43,6 +35,11 @@ class Residence extends facilityClass_1.Facility {
     }
     constructor(x, y, buildCost, powerConsumption, typeOf) {
         super(x, y, buildCost, powerConsumption, typeOf);
+        this._happyPopulation = 0;
+        this._contentPopulation = 0;
+        this._currPopulation = 0;
+        this._currMaxPopulation = 0;
+        this._monthsSinceBuilt = 0;
     }
     growPopulation() {
         if (this._currPopulation < this._currMaxPopulation) {
@@ -55,13 +52,12 @@ class Residence extends facilityClass_1.Facility {
         this._contentPopulation = this._currPopulation - this._happyPopulation;
     }
 }
-exports.Residence = Residence;
-class LuxuryResidence extends Residence {
-    _absoluteMaxPopulation = 10000;
-    _hasStore = false;
-    _hasRestaurant = false;
+export class LuxuryResidence extends Residence {
     constructor(x, y) {
         super(x, y, 1000000000, 100, "LuxuryResidence");
+        this._absoluteMaxPopulation = 10000;
+        this._hasStore = false;
+        this._hasRestaurant = false;
         this._currMaxPopulation = 0;
     }
     calcMonthlyRevenue() {
@@ -104,13 +100,12 @@ class LuxuryResidence extends Residence {
         return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${this._hasRestaurant ? "✅" : "❌"}`;
     }
 }
-exports.LuxuryResidence = LuxuryResidence;
-class ComfortableResidence extends Residence {
-    _absoluteMaxPopulation = 15000;
-    _hasStore = false;
-    _hasRestaurant = false;
+export class ComfortableResidence extends Residence {
     constructor(x, y) {
         super(x, y, 500000000, 50, "ComfortableResidence");
+        this._absoluteMaxPopulation = 15000;
+        this._hasStore = false;
+        this._hasRestaurant = false;
         this._currMaxPopulation = 0;
     }
     calcMonthlyRevenue() {
@@ -148,13 +143,12 @@ class ComfortableResidence extends Residence {
         return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${this._hasRestaurant ? "✅" : "❌"}`;
     }
 }
-exports.ComfortableResidence = ComfortableResidence;
-class AffordableResidence extends Residence {
-    _absoluteMaxPopulation = 25000;
-    _hasStore = false;
-    _hasRestaurant = false;
+export class AffordableResidence extends Residence {
     constructor(x, y) {
         super(x, y, 50000000, 25, "AffordableResidence");
+        this._absoluteMaxPopulation = 25000;
+        this._hasStore = false;
+        this._hasRestaurant = false;
         this._currMaxPopulation = 0;
     }
     calcMonthlyRevenue() {
@@ -192,5 +186,4 @@ class AffordableResidence extends Residence {
         return `Store: ${this._hasStore ? "✅" : "❌"}, Restaurant: ${this._hasRestaurant ? "✅" : "❌"}`;
     }
 }
-exports.AffordableResidence = AffordableResidence;
 //# sourceMappingURL=residenceClass.js.map

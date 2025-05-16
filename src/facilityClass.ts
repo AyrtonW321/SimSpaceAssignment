@@ -1,3 +1,5 @@
+import { Grid } from "./gridClass";
+
 export abstract class Facility {
     protected _x: number = 0;
     protected _y: number = 0;
@@ -43,9 +45,9 @@ export abstract class Facility {
         return this._hasPower;
     }
 
-    public abstract calcMonthlyRevenue(): number;
-    public abstract calcMonthlyPollution(): number;
-    abstract calcMaintenanceCost(): number;
+    abstract calcMonthlyRevenue(grid?: Grid): number;
+    abstract calcMaintenanceCost(grid?: Grid): number;
+    abstract calcMonthlyPollution(): number;
 
     public incrementMonths(): void {
         this._monthsSinceBuilt++;

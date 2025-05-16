@@ -77,6 +77,7 @@ export class PowerPlant extends Facility {
 
     constructor(x: number, y: number) {
         super(x, y, 500000000, 0, "PowerPlant");
+        this._hasPower = true;
     }
 
     public calcMonthlyRevenue(): number {
