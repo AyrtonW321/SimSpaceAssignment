@@ -18,7 +18,7 @@ import {
     Factory,
     EnvironmentalFacility,
 } from "./industrialClass";
-import { PlanetaryDefense } from "./PlanetaryDefense";
+import { PlanetaryDefense } from "./planetaryDefense";
 
 export class User {
     private _grid: Grid;
@@ -140,7 +140,8 @@ export class User {
                             const dy = envFacility.y - y;
                             const dist = Math.sqrt(dx * dx + dy * dy);
                             if (dist <= radius) {
-                                localPollution += envFacility.calcMonthlyPollution();
+                                localPollution +=
+                                    envFacility.calcMonthlyPollution();
                             }
                         }
                     });
@@ -343,7 +344,7 @@ export class User {
     public buildAffordable(x: number, y: number): boolean {
         return this.buildFacility(new AffordableResidence(x, y), 50000000);
     }
-    
+
     public buildPlanetaryDefense(x: number, y: number): boolean {
         if (this._hasPlanetaryDefense) {
             return false;

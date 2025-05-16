@@ -6,7 +6,7 @@ export class EmergencyServices extends Facility {
     }
 
     public calcMonthlyRevenue(): number {
-        return 0; 
+        return 0;
     }
 
     public calcMaintenanceCost(): number {

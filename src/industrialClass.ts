@@ -28,7 +28,7 @@ export class Factory extends IndustrialFacility {
 
     public calcMonthlyRevenue(): number {
         if (!this.hasPower) return 0;
-        
+
         if (this.monthsSinceBuilt === 0) return 0;
         if (this.monthsSinceBuilt === 1) return 1000000;
         if (this.monthsSinceBuilt === 2) return 2000000;
