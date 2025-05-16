@@ -1,10 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Grid = void 0;
-class Grid {
-    _cells;
-    _columns;
-    _rows;
+export class Grid {
     constructor(rows, columns) {
         this._rows = this.rowsCheck(rows);
         this._columns = this.columnCheck(columns);
@@ -58,7 +52,7 @@ class Grid {
         for (let i = 0; i < this._cells.length; i++) {
             for (let j = 0; j < this._cells[i].length; j++) {
                 const cell = this._cells[i][j];
-                if (cell?.typeOf.includes(type)) {
+                if (cell === null || cell === void 0 ? void 0 : cell.typeOf.includes(type)) {
                     count++;
                 }
             }
@@ -103,5 +97,4 @@ class Grid {
         return this._columns;
     }
 }
-exports.Grid = Grid;
 //# sourceMappingURL=gridClass.js.map

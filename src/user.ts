@@ -1,34 +1,88 @@
-window.onload = () => {
-  const canvas = document.getElementById(
-    "gridCanvas"
-  ) as HTMLCanvasElement | null;
-  if (!canvas) return;
+// window.onload = () => {
+//   const canvas = document.getElementById("gridCanvas") as HTMLCanvasElement | null;
+//   if (!canvas) return;
+//   const ctx = canvas.getContext("2d");
+//   if (!ctx) return;
 
-  const ctx = canvas.getContext("2d");
+//   const rows: number = 50;
+//   const cols: number = 50;
+//   const cellSize: number = canvas.width / cols;
+
+//   ctx.strokeStyle = "#ccc";
+
+//   for (let i = 0; i <= cols; i++) {
+//     const x: number = i * cellSize;
+//     ctx.beginPath();
+//     ctx.moveTo(x, 0);
+//     ctx.lineTo(x, canvas.height);
+//     ctx.stroke();
+//   }
+
+//   for (let j = 0; j <= rows; j++) {
+//     const y: number = j * cellSize;
+//     ctx.beginPath();
+//     ctx.moveTo(0, y);
+//     ctx.lineTo(canvas.width, y);
+//     ctx.stroke();
+//   }
+// };
+
+const canvas = document.getElementById("gridCanvas") as HTMLCanvasElement | null;
+const ctx = canvas ? canvas.getContext("2d") : null;
+
+const gridSize = 50;
+const squareSize = (canvas?.width ?? 0) / gridSize;
+interface GridSquare {
+  x: number;
+  y: number;
+  color: string;
+}
+const grid: GridSquare[] = [];
+
+for (let i = 0; i < gridSize; i++){
+  for (let j = 0; j < gridSize; j++)
+  grid.push({
+    x: i * squareSize,
+    y: j * squareSize,
+    color: "#ebebeb",
+  });
+}
+
+function drawGrid(){
   if (!ctx) return;
-
-  const rows: number = 50;
-  const cols: number = 50;
-  const cellSize: number = canvas.width / cols;
-
-  ctx.strokeStyle = "#ccc";
-
-  for (let i = 0; i <= cols; i++) {
-    const x: number = i * cellSize;
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
+  for (const square of grid){
+    ctx.fillStyle = square.color;
+    ctx.strokeStyle = '#CCC';
+    ctx.fillRect(square.x, square.y, squareSize, squareSize);
+    ctx.strokeRect(square.x, square.y, squareSize, squareSize);
   }
+}
 
-  for (let j = 0; j <= rows; j++) {
-    const y: number = j * cellSize;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
-    ctx.stroke();
+function toggleSelected(clickedSquare: GridSquare){
+  clickedSquare.color = clickedSquare.color === "#ebebeb" ? "green" : "#ebebeb";
+}
+
+canvas?.addEventListener("click", function (event: MouseEvent) {
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
+
+  const clickedSquare = grid.find(
+    (square) => 
+      mouseX >= square.x &&
+    mouseX <= square.x + squareSize &&
+    mouseY >= square.y &&
+    mouseY <= square.y + squareSize
+  );
+  
+  if (clickedSquare){
+    toggleSelected(clickedSquare);
   }
-};
+  drawGrid();
+});
+
+drawGrid();
 
 type FacilityType = 'essential' | 'residential' | 'industrial' | 'commercial' | 'defense';
 
@@ -46,22 +100,22 @@ const facilities: Record<FacilityType, FacilityItem[]> = {
     { name: "Power Plants", image: "powerplant.png" }
   ],
   residential: [
-    { name: "Luxury Homes", image: "luxury-homes.png" },
-    { name: "Comfortable Homes", image: "comfortable-homes.png" },
-    { name: "Affordable Homes", image: "affordable-homes.png" }
+    { name: "Luxury Homes", image: "luxury.png" },
+    { name: "Comfortable Homes", image: "comfortable.png" },
+    { name: "Affordable Homes", image: "affordable.png" }
   ],
   industrial: [
     { name: "Factories", image: "factories.png" },
     { name: "Warehouses", image: "warehouses.png" },
-    { name: "Environmental Facilities", image: "environmental-facilities.png" }
+    { name: "Environmental Facilities", image: "environmental.png" }
   ],
   commercial: [
-    { name: "Stores", image: "stores.png" },
-    { name: "Restaurants", image: "restaurants.png" },
-    { name: "Offices", image: "offices.png" }
+    { name: "Stores", image: "store.png" },
+    { name: "Restaurants", image: "restaurant.png" },
+    { name: "Offices", image: "office.png" }
   ],
   defense: [
-    { name: "Planetary Defense System", image: "planetary-defense-system.png" }
+    { name: "Planetary Defense System", image: "shield.png" }
   ]
 };
 

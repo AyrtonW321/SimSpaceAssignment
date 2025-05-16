@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnvironmentalFacility = exports.Factory = exports.IndustrialFacility = void 0;
-const facilityClass_1 = require("./facilityClass");
-class IndustrialFacility extends facilityClass_1.Facility {
+import { Facility } from "./facilityClass";
+export class IndustrialFacility extends Facility {
     constructor(x, y, buildCost, powerConsumption, typeOf) {
         super(x, y, buildCost, powerConsumption, typeOf);
     }
@@ -10,8 +7,7 @@ class IndustrialFacility extends facilityClass_1.Facility {
         return grid.hasFacilityTypeInRadius(this.x, this.y, 6, "PowerPlant");
     }
 }
-exports.IndustrialFacility = IndustrialFacility;
-class Factory extends IndustrialFacility {
+export class Factory extends IndustrialFacility {
     constructor(x, y) {
         super(x, y, 50000000, 50, "Factory");
     }
@@ -50,7 +46,6 @@ class Factory extends IndustrialFacility {
         return this.isNearPowerPlant(grid);
     }
 }
-exports.Factory = Factory;
 /* MAKE LATER
 export class Warehouse extends IndustrialFacility {
     constructor(x: number, y: number) {
@@ -70,11 +65,11 @@ export class Warehouse extends IndustrialFacility {
     }
 }
 */
-class EnvironmentalFacility extends IndustrialFacility {
-    _pollutionReductionRadius = 10;
-    _maxPollutionReduction = 30000;
+export class EnvironmentalFacility extends IndustrialFacility {
     constructor(x, y) {
         super(x, y, 200000000, 75, "EnvironmentalFacility");
+        this._pollutionReductionRadius = 10;
+        this._maxPollutionReduction = 30000;
     }
     calcMonthlyRevenue() {
         return 0;
@@ -95,5 +90,4 @@ class EnvironmentalFacility extends IndustrialFacility {
         return this._maxPollutionReduction;
     }
 }
-exports.EnvironmentalFacility = EnvironmentalFacility;
 //# sourceMappingURL=industrialClass.js.map

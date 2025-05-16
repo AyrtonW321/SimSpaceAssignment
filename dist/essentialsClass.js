@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PowerPlant = exports.GovernmentFacility = exports.MedicalCenter = exports.EducationCenter = exports.EmergencyServices = void 0;
-const facilityClass_1 = require("./facilityClass");
-class EmergencyServices extends facilityClass_1.Facility {
+import { Facility } from "./facilityClass";
+export class EmergencyServices extends Facility {
     constructor(x, y) {
         super(x, y, 100000000, 10, "EmergencyServices");
     }
@@ -16,8 +13,7 @@ class EmergencyServices extends facilityClass_1.Facility {
         return 0;
     }
 }
-exports.EmergencyServices = EmergencyServices;
-class EducationCenter extends facilityClass_1.Facility {
+export class EducationCenter extends Facility {
     constructor(x, y) {
         super(x, y, 500000000, 15, "EducationCenter");
     }
@@ -31,8 +27,7 @@ class EducationCenter extends facilityClass_1.Facility {
         return 0;
     }
 }
-exports.EducationCenter = EducationCenter;
-class MedicalCenter extends facilityClass_1.Facility {
+export class MedicalCenter extends Facility {
     constructor(x, y) {
         super(x, y, 1000000000, 20, "MedicalCenter");
     }
@@ -46,8 +41,7 @@ class MedicalCenter extends facilityClass_1.Facility {
         return 0;
     }
 }
-exports.MedicalCenter = MedicalCenter;
-class GovernmentFacility extends facilityClass_1.Facility {
+export class GovernmentFacility extends Facility {
     constructor(x, y) {
         super(x, y, 100000000, 10, "GovernmentFacility");
     }
@@ -61,11 +55,10 @@ class GovernmentFacility extends facilityClass_1.Facility {
         return 0;
     }
 }
-exports.GovernmentFacility = GovernmentFacility;
-class PowerPlant extends facilityClass_1.Facility {
-    _powerOutput = 100;
+export class PowerPlant extends Facility {
     constructor(x, y) {
         super(x, y, 500000000, 0, "PowerPlant");
+        this._powerOutput = 100;
     }
     calcMonthlyRevenue() {
         return 0;
@@ -80,5 +73,4 @@ class PowerPlant extends facilityClass_1.Facility {
         return this._powerOutput;
     }
 }
-exports.PowerPlant = PowerPlant;
 //# sourceMappingURL=essentialsClass.js.map

@@ -1,15 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Facility = void 0;
-class Facility {
-    _x = 0;
-    _y = 0;
-    _buildCost = 0;
-    _powerConsumption = 0;
-    _typeOf;
-    _monthsSinceBuilt = 0;
-    _hasPower = false;
+export class Facility {
     constructor(x, y, buildCost, powerConsumption, typeOf) {
+        this._x = 0;
+        this._y = 0;
+        this._buildCost = 0;
+        this._powerConsumption = 0;
+        this._monthsSinceBuilt = 0;
+        this._hasPower = false;
         this._x = x;
         this._y = y;
         this._buildCost = buildCost;
@@ -30,5 +26,4 @@ class Facility {
         this._hasPower = hasPower;
     }
 }
-exports.Facility = Facility;
 //# sourceMappingURL=facilityClass.js.map

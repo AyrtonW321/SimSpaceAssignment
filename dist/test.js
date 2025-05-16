@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const userClass_1 = require("./userClass");
+import { User } from "./userClass";
 function runTests() {
     // Initialize a grid of 10x10 and a new User
-    const user = new userClass_1.User(10, 10);
+    const user = new User(10, 10);
     // Test initial values
     console.log("Initial User Money:", user.userMoney);
     console.log("Initial Population:", user.totalPopulation);
