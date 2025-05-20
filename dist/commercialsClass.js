@@ -1,4 +1,4 @@
-import { Facility } from "./facilityClass";
+import { Facility } from "./facilityClass.js";
 export class Commercials extends Facility {
     constructor(x, y, buildCost, powerConsumption, typeOf) {
         super(x, y, buildCost, powerConsumption, typeOf);

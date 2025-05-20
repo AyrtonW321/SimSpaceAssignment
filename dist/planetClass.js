@@ -1,9 +1,10 @@
-import { Grid } from "./gridClass";
-import { Residence, LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass";
-import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass";
-import { IndustrialFacility, Factory, EnvironmentalFacility, Warehouse, } from "./industrialClass";
-import { Commercials, Store, Restaurant, Office } from "./commercialsClass";
-import { PlanetaryDefense } from "./planetaryDefense";
+import { Grid } from "./gridClass.js";
+import { Residence, LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass.js";
+import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass.js";
+import { IndustrialFacility, Factory, EnvironmentalFacility, Warehouse, } from "./industrialClass.js";
+import { Commercials, Store, Restaurant, Office } from "./commercialsClass.js";
+import { PlanetaryDefense } from "./planetaryDefense.js";
+console.log("it works!");
 export class Planet {
     constructor(rows, col) {
         this._usedCoords = [];

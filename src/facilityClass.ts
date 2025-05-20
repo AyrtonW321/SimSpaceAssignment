@@ -1,4 +1,4 @@
-import { Grid } from "./gridClass";
+import { Grid } from "./gridClass.js";
 
 export abstract class Facility {
     protected _x: number = 0;

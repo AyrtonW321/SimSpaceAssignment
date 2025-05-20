@@ -1,4 +1,4 @@
-import { Facility } from "./facilityClass";
+import { Facility } from "./facilityClass.js";
 export class EmergencyServices extends Facility {
     constructor(x, y) {
         super(x, y, 100000000, 10, "EmergencyServices");

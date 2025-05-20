@@ -1,4 +1,4 @@
-import { Facility } from "./facilityClass";
+import { Facility } from "./facilityClass.js";
 export class PlanetaryDefense extends Facility {
     constructor(x, y) {
         super(x, y, 1000000000000, 0, "PlanetaryDefense");

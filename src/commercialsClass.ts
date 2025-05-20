@@ -1,5 +1,5 @@
-import { Grid } from "./gridClass";
-import { Facility } from "./facilityClass";
+import { Grid } from "./gridClass.js";
+import { Facility } from "./facilityClass.js";
 
 export abstract class Commercials extends Facility {
     constructor(

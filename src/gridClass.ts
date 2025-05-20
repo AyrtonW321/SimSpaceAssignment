@@ -1,4 +1,4 @@
-import { Facility } from "./facilityClass";
+import { Facility } from "./facilityClass.js";
 
 export class Grid {
     private _cells: Facility[][] | null[][];
