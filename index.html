@@ -1,13 +1,13 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SimSpace</title>
-    <link rel="stylesheet" href="../css/index.css" />
-    <link rel="icon" href="./Imgs/logopng.png" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="icon" href="./css/index.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"> -->
 </head>
 
 <body>
@@ -16,6 +16,12 @@
         <div class="infoItem">Money: $0</div>
         <div class="infoItem">Population: 0</div>
         <div class="infoItem">Score: 0</div>
+        <div>
+            <button type="button" class="pauseButton">
+                <i class="fa-solid fa-play"></i>
+                <i class="fa-solid fa-pause"></i>
+            </button>
+        </div>
     </div>
 
     <div class="gridContainer">
@@ -31,14 +37,14 @@
                 <button type="button" class="typeButton" data-type="commercial">Commercial</button>
                 <button type="button" class="typeButton" data-type="defense">Planetary Defense System</button>
             </div>
-
         </div>
         <div class="selectorButtonContainer">
             <button type="button" class="selectorButton"></button>
         </div>
     </div>
 
+    <script type="module" src="./dist/user.js"></script>
 </body>
-<script src="../dist/user.js" defer></script>
+
 
 </html>

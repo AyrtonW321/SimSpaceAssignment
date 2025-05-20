@@ -1,23 +1,26 @@
 {
   "name": "simspaceassignment",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "",
+  "homepage": "https://github.com/AyrtonW321/SimSpaceAssignment#readme",
+  "bugs": {
+    "url": "https://github.com/AyrtonW321/SimSpaceAssignment/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AyrtonW321/SimSpaceAssignment.git"
   },
-  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AyrtonW321/SimSpaceAssignment/issues"
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/AyrtonW321/SimSpaceAssignment#readme",
-  "description": "",
   "dependencies": {
-    "@types/node": "^22.15.15",
-    "typescript": "^5.8.3"
+    "@types/node": "^22.15.18",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "undici-types": "^7.9.0"
   }
 }

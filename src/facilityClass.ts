@@ -1,5 +1,3 @@
-
-
 export abstract class Facility{
     protected _x: number = 0;
     protected _y: number = 0;

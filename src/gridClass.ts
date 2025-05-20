@@ -1,5 +1,8 @@
 import { Facility } from "./facilityClass";
 
+// Grid doesn't actually draw the grid
+// It only makes the framework for it
+
 export class Grid {
     private _cells: Facility[][] | null[][];
     private _columns: number;
