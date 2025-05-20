@@ -1,157 +1,210 @@
-import { Planet } from "./planetClass";
-function runCompleteTestSuite() {
-    // Initialize a fresh planet for testing
-    const testPlanet = new Planet(10, 10);
-    let testPassed = 0;
-    let testFailed = 0;
-    // Helper function to log test results
-    function logTestResult(testName, passed, message) {
-        if (passed) {
-            console.log(`✅ ${testName}`);
-            testPassed++;
+"use strict";
+let canvas = document.getElementById("canvas");
+let context = canvas.getContext("2d");
+if (!canvas || !context) {
+    throw new Error("Failed to get canvas or context");
+}
+// Set up canvas dimensions
+canvas.width = window.innerWidth - 220; // Leave space for toolbox
+canvas.height = window.innerHeight - 20;
+canvas.style.border = "5px solid #333";
+canvas.style.marginLeft = "200px";
+// Create toolbox container
+const toolbox = document.createElement("div");
+toolbox.style.position = "absolute";
+toolbox.style.left = "10px";
+toolbox.style.top = "10px";
+toolbox.style.width = "180px";
+toolbox.style.height = `${canvas.height}px`;
+toolbox.style.border = "2px solid #333";
+toolbox.style.padding = "10px";
+toolbox.style.backgroundColor = "#f0f0f0";
+toolbox.style.boxSizing = "border-box";
+document.body.appendChild(toolbox);
+// Create a canvas for the toolbox shapes
+const toolboxCanvas = document.createElement("canvas");
+toolboxCanvas.width = 160;
+toolboxCanvas.height = canvas.height - 20;
+toolboxCanvas.style.display = "block";
+toolboxCanvas.style.margin = "0 auto";
+toolbox.appendChild(toolboxCanvas);
+let shapes = [];
+let nextId = 1;
+// Create toolbox shapes
+const toolboxShapes = [
+    { type: "rectangle", color: "#ff5252" },
+    { type: "circle", color: "#4caf50" },
+    { type: "triangle", color: "#2196f3" }
+];
+// Add shapes to toolbox
+toolboxShapes.forEach((shapeDef, index) => {
+    const shape = {
+        id: nextId++,
+        type: shapeDef.type,
+        x: 20,
+        y: 20 + index * 120,
+        width: 100,
+        height: 100,
+        color: shapeDef.color,
+        isDragging: false,
+        dragOffsetX: 0,
+        dragOffsetY: 0,
+        isInToolbox: true
+    };
+    shapes.push(shape);
+    // Add label to toolbox
+    const label = document.createElement("div");
+    label.textContent = `${shapeDef.type}`;
+    label.style.marginTop = `${shape.y + 110}px`;
+    label.style.textAlign = "center";
+    toolbox.appendChild(label);
+});
+// Canvas shapes (initially empty)
+let activeShape = null;
+function draw_shapes() {
+    if (!context)
+        return;
+    // Clear canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw all shapes not in toolbox
+    shapes.filter(shape => !shape.isInToolbox).forEach(shape => {
+        if (context == null)
+            return;
+        context.fillStyle = shape.color;
+        switch (shape.type) {
+            case "rectangle":
+                context.fillRect(shape.x, shape.y, shape.width, shape.height);
+                break;
+            case "circle":
+                context.beginPath();
+                context.arc(shape.x + shape.width / 2, shape.y + shape.height / 2, shape.width / 2, 0, Math.PI * 2);
+                context.fill();
+                break;
+            case "triangle":
+                context.beginPath();
+                context.moveTo(shape.x + shape.width / 2, shape.y);
+                context.lineTo(shape.x, shape.y + shape.height);
+                context.lineTo(shape.x + shape.width, shape.y + shape.height);
+                context.closePath();
+                context.fill();
+                break;
         }
-        else {
-            console.log(`❌ ${testName}`, message || "");
-            testFailed++;
+    });
+    // Draw toolbox shapes
+    const toolboxCtx = toolboxCanvas.getContext("2d");
+    if (!toolboxCtx)
+        return;
+    toolboxCtx.clearRect(0, 0, toolboxCanvas.width, toolboxCanvas.height);
+    shapes.filter(shape => shape.isInToolbox).forEach(shape => {
+        toolboxCtx.fillStyle = shape.color;
+        switch (shape.type) {
+            case "rectangle":
+                toolboxCtx.fillRect(shape.x, shape.y, shape.width, shape.height);
+                break;
+            case "circle":
+                toolboxCtx.beginPath();
+                toolboxCtx.arc(shape.x + shape.width / 2, shape.y + shape.height / 2, shape.width / 2, 0, Math.PI * 2);
+                toolboxCtx.fill();
+                break;
+            case "triangle":
+                toolboxCtx.beginPath();
+                toolboxCtx.moveTo(shape.x + shape.width / 2, shape.y);
+                toolboxCtx.lineTo(shape.x, shape.y + shape.height);
+                toolboxCtx.lineTo(shape.x + shape.width, shape.y + shape.height);
+                toolboxCtx.closePath();
+                toolboxCtx.fill();
+                break;
+        }
+    });
+}
+function isPointInShape(x, y, shape) {
+    switch (shape.type) {
+        case "rectangle":
+            return x >= shape.x && x <= shape.x + shape.width &&
+                y >= shape.y && y <= shape.y + shape.height;
+        case "circle":
+            const centerX = shape.x + shape.width / 2;
+            const centerY = shape.y + shape.height / 2;
+            const radius = shape.width / 2;
+            return Math.sqrt(Math.pow((x - centerX), 2) + Math.pow((y - centerY), 2)) <= radius;
+        case "triangle":
+            // Simple triangle hit test (for equilateral triangle)
+            return y >= shape.y &&
+                y <= shape.y + shape.height &&
+                x >= shape.x + (y - shape.y) * (shape.width / 2) / shape.height &&
+                x <= shape.x + shape.width - (y - shape.y) * (shape.width / 2) / shape.height;
+        default:
+            return false;
+    }
+}
+// Mouse event handlers
+canvas.addEventListener('mousedown', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    // Check if clicking on a shape on canvas
+    for (let shape of shapes.filter(s => !s.isInToolbox)) {
+        if (isPointInShape(mouseX, mouseY, shape)) {
+            activeShape = shape;
+            activeShape.isDragging = true;
+            activeShape.dragOffsetX = mouseX - shape.x;
+            activeShape.dragOffsetY = mouseY - shape.y;
+            break;
         }
     }
-    console.log("=== BASIC CHECKS ===");
-    // Test 1: Initial state validation
-    (() => {
-        const passed = testPlanet.userMoney === 5000000000 &&
-            testPlanet.totalPopulation === 0 &&
-            testPlanet.totalPollution === 0;
-        logTestResult("Initial state correct", passed);
-    })();
-    // Test 2: Power Plant construction
-    (() => {
-        const result = testPlanet.buildPP(2, 2);
-        const facility = testPlanet.getFacilityAt(2, 2);
-        const passed = result && (facility === null || facility === void 0 ? void 0 : facility.typeOf) === "PowerPlant";
-        logTestResult("Power Plant construction", passed);
-    })();
-    console.log("\n=== INDUSTRIAL FACILITIES ===");
-    // Test 3: Factory near Power Plant (should pass)
-    (() => {
-        var _a;
-        const result = testPlanet.buildFactory(3, 3); // Adjacent to PP
-        const passed = result && ((_a = testPlanet.getFacilityAt(3, 3)) === null || _a === void 0 ? void 0 : _a.typeOf) === "Factory";
-        logTestResult("Factory near Power Plant", passed);
-    })();
-    // Test 4: Factory far from Power Plant (should fail)
-    (() => {
-        const result = testPlanet.buildFactory(8, 8); // Far from PP
-        const passed = !result && testPlanet.getFacilityAt(8, 8) === null;
-        logTestResult("Factory far from Power Plant should fail", passed);
-    })();
-    // Test 5: Environmental Facility
-    (() => {
-        var _a;
-        const result = testPlanet.buildEnvFacility(4, 4);
-        const passed = result &&
-            ((_a = testPlanet.getFacilityAt(4, 4)) === null || _a === void 0 ? void 0 : _a.typeOf) === "EnvironmentalFacility";
-        logTestResult("Environmental Facility construction", passed);
-    })();
-    console.log("\n=== POWER DISTRIBUTION ===");
-    // Test 6: Monthly power update
-    (() => {
-        testPlanet.calculateMonthlyUpdates();
-        const powerBalance = testPlanet.powerBalance;
-        // Should have:
-        // - 100 power generated
-        // - 75 used by Env Facility
-        // - 25 remaining
-        const passed = powerBalance === 25;
-        logTestResult("Power distribution calculation", passed, `Got ${powerBalance}, expected 25`);
-    })();
-    // Test 7: Power priority system
-    (() => {
-        const facilities = testPlanet.getAllFacilities();
-        const factory = facilities.find((f) => f.typeOf === "Factory");
-        const envFacility = facilities.find((f) => f.typeOf === "EnvironmentalFacility");
-        // Env Facility should have power, Factory shouldn't (same priority but not enough power)
-        const passed = (envFacility === null || envFacility === void 0 ? void 0 : envFacility.hasPower) && !(factory === null || factory === void 0 ? void 0 : factory.hasPower);
-        logTestResult("Power priority respected", !!passed);
-    })();
-    console.log("\n=== POLLUTION SYSTEM ===");
-    // Test 8: Pollution generation
-    (() => {
-        testPlanet.calculateMonthlyUpdates(); // Run another month
-        const pollution = testPlanet.totalPollution;
-        // Factory should generate 20,000 pollution
-        // Env Facility reduces up to 30,000
-        // Expected: 20,000 - 20,000 (full reduction) = 0
-        const passed = pollution === 0;
-        logTestResult("Pollution calculation with reduction", passed, `Got ${pollution}, expected 0`);
-    })();
-    // Test 9: Pollution without reduction
-    (() => {
-        // Build a factory outside reduction radius
-        testPlanet.buildFactory(9, 9);
-        testPlanet.calculateMonthlyUpdates();
-        const pollution = testPlanet.totalPollution;
-        // Should have:
-        // - Factory at (3,3): 20,000 (reduced)
-        // - Factory at (9,9): 20,000 (not reduced)
-        const passed = pollution === 20000;
-        logTestResult("Pollution without reduction", passed, `Got ${pollution}, expected 20000`);
-    })();
-    console.log("\n=== RESIDENTIAL AREAS ===");
-    // Modify Test 10 to show which service failed:
-    (() => {
-        const services = [
-            { name: "Emergency", result: testPlanet.buildEmergencyServ(5, 5) },
-            { name: "Education", result: testPlanet.buildEduCenter(5, 6) },
-            { name: "Medical", result: testPlanet.buildMedCenter(5, 7) },
-            { name: "Government", result: testPlanet.buildGovernment(5, 8) },
-            {
-                name: "Environmental",
-                result: testPlanet.buildEnvFacility(5, 9),
-            },
-            { name: "Store", result: testPlanet.buildStore(6, 5) },
-            { name: "Restaurant", result: testPlanet.buildRestaurant(6, 6) },
-        ];
-        services.forEach((s) => {
-            console.log(`${s.name} service built: ${s.result}`);
-        });
-        const allBuilt = services.every((s) => s.result);
-        logTestResult("Required services construction", allBuilt);
-    })();
-    // Test 11: Residence construction
-    (() => {
-        var _a;
-        const result = testPlanet.buildAffordable(7, 7);
-        const passed = result &&
-            ((_a = testPlanet.getFacilityAt(7, 7)) === null || _a === void 0 ? void 0 : _a.typeOf) === "AffordableResidence";
-        logTestResult("Residence with requirements", passed);
-    })();
-    // Test 12: Population growth
-    (() => {
-        const initialPop = testPlanet.totalPopulation;
-        // Simulate 5 months
-        for (let i = 0; i < 5; i++) {
-            testPlanet.calculateMonthlyUpdates();
+});
+toolboxCanvas.addEventListener('mousedown', (e) => {
+    const rect = toolboxCanvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    // Check if clicking on a shape in toolbox
+    for (let shape of shapes.filter(s => s.isInToolbox)) {
+        if (isPointInShape(mouseX, mouseY, shape)) {
+            // Create a copy of the shape for the canvas
+            const newShape = Object.assign(Object.assign({}, shape), { id: nextId++, x: 50, y: 50, isDragging: true, isInToolbox: false, dragOffsetX: 25, dragOffsetY: 25 // Center offset
+             });
+            shapes.push(newShape);
+            activeShape = newShape;
+            break;
         }
-        const newPop = testPlanet.totalPopulation;
-        const passed = newPop > initialPop;
-        logTestResult("Population growth", passed, `From ${initialPop} to ${newPop}`);
-    })();
-    console.log("\n=== PLANETARY DEFENSE ===");
-    // Test 13: Planetary Defense (with sufficient funds)
-    (() => {
-        // Temporarily increase funds
-        testPlanet["_userMoney"] = 1000000000000;
-        const result = testPlanet.buildPlanetaryDefense(0, 0);
-        const passed = result && testPlanet.hasPlanetaryDefense;
-        logTestResult("Planetary Defense with sufficient funds", passed);
-    })();
-    console.log("\n=== FINAL RESULTS ===");
-    console.log(`Tests passed: ${testPassed}`);
-    console.log(`Tests failed: ${testFailed}`);
-    console.log(`Success rate: ${Math.round((testPassed / (testPassed + testFailed)) * 100)}%`);
-    // Return the test planet for further inspection if needed
-    return testPlanet;
-}
-// Run the complete test suite
-runCompleteTestSuite();
+    }
+});
+document.addEventListener('mousemove', (e) => {
+    if (!activeShape)
+        return;
+    const rect = activeShape.isInToolbox ? toolbox.getBoundingClientRect() : canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    if (activeShape.isDragging) {
+        activeShape.x = mouseX - activeShape.dragOffsetX;
+        activeShape.y = mouseY - activeShape.dragOffsetY;
+        draw_shapes();
+    }
+});
+document.addEventListener('mouseup', () => {
+    if (activeShape) {
+        activeShape.isDragging = false;
+        // If shape was dragged from toolbox to outside toolbox, keep it
+        if (activeShape.isInToolbox) {
+            // Remove the shape if it wasn't moved to canvas
+            const index = shapes.findIndex(s => s.id === activeShape.id);
+            if (index !== -1 &&
+                (activeShape.x < 0 || activeShape.x > canvas.width ||
+                    activeShape.y < 0 || activeShape.y > canvas.height)) {
+                shapes.splice(index, 1);
+            }
+        }
+        activeShape = null;
+    }
+    draw_shapes();
+});
+// Initial draw
+draw_shapes();
+// Handle window resize
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth - 220;
+    canvas.height = window.innerHeight - 20;
+    toolbox.style.height = `${canvas.height}px`;
+    draw_shapes();
+});
 //# sourceMappingURL=test.js.map

@@ -4,7 +4,6 @@ import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, 
 import { IndustrialFacility, Factory, EnvironmentalFacility, Warehouse, } from "./industrialClass.js";
 import { Commercials, Store, Restaurant, Office } from "./commercialsClass.js";
 import { PlanetaryDefense } from "./planetaryDefense.js";
-console.log("it works!");
 export class Planet {
     constructor(rows, col) {
         this._usedCoords = [];
