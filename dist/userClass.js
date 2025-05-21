@@ -1,8 +1,8 @@
-import { Grid } from "./gridClass";
+import { Grid } from "./gridClass.js";
 import { Residence, LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass";
 import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass";
 import { IndustrialFacility, Factory, EnvironmentalFacility, } from "./industrialClass";
-import { PlanetaryDefense } from "./PlanetaryDefense";
+import { PlanetaryDefense } from "./planetaryDefense";
 export class User {
     constructor(rows, col) {
         this._usedCoords = [];

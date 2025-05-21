@@ -1,4 +1,4 @@
-import { User } from "./userClass";
+import { User } from "./userClass.js";
 
 
 let setX = (document.getElementById("x") as HTMLInputElement).value;

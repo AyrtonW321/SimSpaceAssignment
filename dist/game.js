@@ -1,4 +1,4 @@
-import { User } from "./userClass";
+import { User } from "./userClass.js";
 let setX = document.getElementById("x").value;
 let setY = document.getElementById("y").value;
 let user = new User(parseInt(setX), parseInt(setY));

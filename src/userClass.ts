@@ -1,5 +1,5 @@
-import { Grid } from "./gridClass";
-import { Facility } from "./facilityClass";
+import { Grid } from "./gridClass.js";
+import { Facility } from "./facilityClass.js";
 import {
     Residence,
     LuxuryResidence,
@@ -18,7 +18,7 @@ import {
     Factory,
     EnvironmentalFacility,
 } from "./industrialClass";
-import { PlanetaryDefense } from "./PlanetaryDefense";
+import { PlanetaryDefense } from "./planetaryDefense";
 
 export class User {
     private _grid: Grid;

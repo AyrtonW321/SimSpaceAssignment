@@ -1,4 +1,4 @@
-import { Facility } from "./facilityClass";
+import { Facility } from "./facilityClass.js";
 export class Residence extends Facility {
     // Getters
     get happyPopulation() {

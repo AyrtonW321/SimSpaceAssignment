@@ -1,4 +1,4 @@
-import { Facility } from "./facilityClass";
+import { Facility } from "./facilityClass.js";
 
 // Grid doesn't actually draw the grid
 // It only makes the framework for it

@@ -111,6 +111,11 @@ body {
   border: 2px solid #ccc;
   border-radius: 8px;
   background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .selectorButton:hover {
@@ -118,11 +123,30 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.selectorButton img {
-  border-radius: 6px;
-  transition: transform 0.2s ease;
+.selectorButton.selected {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
-.selectorButton:hover img {
+.buildingImage {
+  max-width: 140px;
+  max-height: 140px;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+
+}
+
+.selectorButton:hover .buildingImage {
   transform: scale(1.05);
+}
+
+.buildingName {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.cost {
+  font-size: 13px;
+  color: #555;
 }
