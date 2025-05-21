@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 // Grid doesn't actually draw the grid
 // It only makes the framework for it
-=======
->>>>>>> User
 export class Grid {
     constructor(rows, columns) {
         this._rows = this.rowsCheck(rows);

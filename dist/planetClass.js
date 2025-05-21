@@ -1,7 +1,8 @@
 import { Grid } from "./gridClass.js";
 import { Residence, LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass.js";
 import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass.js";
-import { IndustrialFacility, Factory, EnvironmentalFacility, Warehouse, } from "./industrialClass.js";
+import { IndustrialFacility, Factory, EnvironmentalFacility, } from "./industrialClass";
+import { Warehouse } from "./industrialClass.js";
 import { Commercials, Store, Restaurant, Office } from "./commercialsClass.js";
 import { PlanetaryDefense } from "./planetaryDefense.js";
 export class Planet {

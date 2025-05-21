@@ -26,10 +26,6 @@ export class Factory extends IndustrialFacility {
         return this.isNearPowerPlant(grid);
     }
 }
-<<<<<<< HEAD
-/* MAKE LATER
-=======
->>>>>>> User
 export class Warehouse extends IndustrialFacility {
     constructor(x, y) {
         super(x, y, 10000000, 10, "Warehouse");
@@ -50,10 +46,6 @@ export class Warehouse extends IndustrialFacility {
         return grid.hasFacilityTypeInRadius(this.x, this.y, 5, "Factory");
     }
 }
-<<<<<<< HEAD
-*/
-=======
->>>>>>> User
 export class EnvironmentalFacility extends IndustrialFacility {
     constructor(x, y) {
         super(x, y, 200000000, 75, "EnvironmentalFacility");
