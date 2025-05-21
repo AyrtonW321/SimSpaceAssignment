@@ -12,13 +12,27 @@ export class Facility {
         this._powerConsumption = powerConsumption;
         this._typeOf = typeOf;
     }
-    get x() { return this._x; }
-    get y() { return this._y; }
-    get buildCost() { return this._buildCost; }
-    get powerConsumption() { return this._powerConsumption; }
-    get typeOf() { return this._typeOf; }
-    get monthsSinceBuilt() { return this._monthsSinceBuilt; }
-    get hasPower() { return this._hasPower; }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    get buildCost() {
+        return this._buildCost;
+    }
+    get powerConsumption() {
+        return this._powerConsumption;
+    }
+    get typeOf() {
+        return this._typeOf;
+    }
+    get monthsSinceBuilt() {
+        return this._monthsSinceBuilt;
+    }
+    get hasPower() {
+        return this._hasPower;
+    }
     incrementMonths() {
         this._monthsSinceBuilt++;
     }

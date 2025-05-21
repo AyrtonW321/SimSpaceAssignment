@@ -12,59 +12,48 @@ export class Factory extends IndustrialFacility {
         super(x, y, 50000000, 50, "Factory");
     }
     calcMonthlyRevenue() {
-        if (!this.hasPower)
+        if (!this.hasPower || this.monthsSinceBuilt === 0)
             return 0;
-        if (this.monthsSinceBuilt === 0)
-            return 0;
-        if (this.monthsSinceBuilt === 1)
-            return 1000000;
-        if (this.monthsSinceBuilt === 2)
-            return 2000000;
-        if (this.monthsSinceBuilt === 3)
-            return 3000000;
-        if (this.monthsSinceBuilt === 4)
-            return 4000000;
-        return 5000000;
+        return Math.min(this.monthsSinceBuilt, 5) * 1000000;
     }
     calcMaintenanceCost() {
-        if (this.monthsSinceBuilt === 0)
-            return 0;
-        if (this.monthsSinceBuilt === 1)
-            return 100000;
-        if (this.monthsSinceBuilt === 2)
-            return 200000;
-        if (this.monthsSinceBuilt === 3)
-            return 300000;
-        if (this.monthsSinceBuilt === 4)
-            return 400000;
-        return 500000;
+        return Math.min(this.monthsSinceBuilt, 5) * 100000;
     }
     calcMonthlyPollution() {
-        return 20000; // Fixed pollution amount
+        return 20000;
     }
     canBeBuilt(grid) {
         return this.isNearPowerPlant(grid);
     }
 }
+<<<<<<< HEAD
 /* MAKE LATER
+=======
+>>>>>>> User
 export class Warehouse extends IndustrialFacility {
-    constructor(x: number, y: number) {
+    constructor(x, y) {
+        super(x, y, 10000000, 10, "Warehouse");
     }
-
-    public calcMonthlyRevenue(): number {
-        if (!this.hasPower) return 0;
+    calcMonthlyRevenue() {
+        return 0;
     }
-
-    public calcMaintenanceCost(): number {
+    calcMaintenanceCost() {
+        return 5000000;
     }
-
-    public calcMonthlyPollution(): number {
+    calcMonthlyPollution() {
+        return 0;
     }
-
-    public canBeBuilt(grid: Grid): boolean {
+    canBeBuilt(grid) {
+        return this.isNearPowerPlant(grid);
+    }
+    isBoostingFactory(grid) {
+        return grid.hasFacilityTypeInRadius(this.x, this.y, 5, "Factory");
     }
 }
+<<<<<<< HEAD
 */
+=======
+>>>>>>> User
 export class EnvironmentalFacility extends IndustrialFacility {
     constructor(x, y) {
         super(x, y, 200000000, 75, "EnvironmentalFacility");

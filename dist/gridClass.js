@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 // Grid doesn't actually draw the grid
 // It only makes the framework for it
+=======
+>>>>>>> User
 export class Grid {
     constructor(rows, columns) {
         this._rows = this.rowsCheck(rows);
@@ -73,7 +76,10 @@ export class Grid {
         const maxY = Math.min(this._columns - 1, col + radius);
         for (let i = minX; i <= maxX; i++) {
             for (let j = minY; j <= maxY; j++) {
-                if (this._cells[i][j] !== null) {
+                const dx = i - rows;
+                const dy = j - col;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist <= radius && this._cells[i][j] !== null) {
                     facilities.push(this._cells[i][j]);
                 }
             }

@@ -103,11 +103,16 @@ export class Grid {
 
         for (let i = minX; i <= maxX; i++) {
             for (let j = minY; j <= maxY; j++) {
-                if (this._cells[i][j] !== null) {
+                const dx = i - rows;
+                const dy = j - col;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist <= radius && this._cells[i][j] !== null) {
                     facilities.push(this._cells[i][j]!);
                 }
             }
         }
+
         return facilities;
     }
 

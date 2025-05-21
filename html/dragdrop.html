@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shape Canvas</title>
+    <style>
+        body { 
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            overflow: hidden;
+        }
+        #toolbox {
+            width: 180px;
+            height: 100vh;
+            padding: 10px;
+            background: #f0f0f0;
+            border-right: 2px solid #333;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .toolbox-shape {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            cursor: grab;
+        }
+        .shape-label {
+            text-align: center;
+            margin-top: 5px;
+        }
+        #canvas {
+            background: white;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbox">
+        <div class="toolbox-item">
+            <div id="toolbox-rectangle" class="toolbox-shape" style="background: #ff5252;"></div>
+            <div class="shape-label">Rectangle</div>
+        </div>
+        <div class="toolbox-item">
+            <div id="toolbox-circle" class="toolbox-shape" style="border-radius: 50%; background: #4caf50;"></div>
+            <div class="shape-label">Circle</div>
+        </div>
+        <div class="toolbox-item">
+            <div id="toolbox-triangle" class="toolbox-shape" style="background: #2196f3; clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"></div>
+            <div class="shape-label">Triangle</div>
+        </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script src="dragdrop.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@ export class EmergencyServices extends Facility {
     }
 
     public calcMonthlyRevenue(): number {
-        return 0; 
+        return 0;
     }
 
     public calcMaintenanceCost(): number {
@@ -77,6 +77,7 @@ export class PowerPlant extends Facility {
 
     constructor(x: number, y: number) {
         super(x, y, 500000000, 0, "PowerPlant");
+        this._hasPower = true;
     }
 
     public calcMonthlyRevenue(): number {

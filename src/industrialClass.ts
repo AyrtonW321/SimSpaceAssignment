@@ -19,6 +19,8 @@ export abstract class IndustrialFacility extends Facility {
     public abstract calcMonthlyRevenue(): number;
     public abstract calcMaintenanceCost(): number;
     public abstract calcMonthlyPollution(): number;
+
+    public abstract canBeBuilt(grid: Grid): boolean;
 }
 
 export class Factory extends IndustrialFacility {
@@ -27,27 +29,16 @@ export class Factory extends IndustrialFacility {
     }
 
     public calcMonthlyRevenue(): number {
-        if (!this.hasPower) return 0;
-        
-        if (this.monthsSinceBuilt === 0) return 0;
-        if (this.monthsSinceBuilt === 1) return 1000000;
-        if (this.monthsSinceBuilt === 2) return 2000000;
-        if (this.monthsSinceBuilt === 3) return 3000000;
-        if (this.monthsSinceBuilt === 4) return 4000000;
-        return 5000000;
+        if (!this.hasPower || this.monthsSinceBuilt === 0) return 0;
+        return Math.min(this.monthsSinceBuilt, 5) * 1000000;
     }
 
     public calcMaintenanceCost(): number {
-        if (this.monthsSinceBuilt === 0) return 0;
-        if (this.monthsSinceBuilt === 1) return 100000;
-        if (this.monthsSinceBuilt === 2) return 200000;
-        if (this.monthsSinceBuilt === 3) return 300000;
-        if (this.monthsSinceBuilt === 4) return 400000;
-        return 500000;
+        return Math.min(this.monthsSinceBuilt, 5) * 100000;
     }
 
     public calcMonthlyPollution(): number {
-        return 20000; // Fixed pollution amount
+        return 20000;
     }
 
     public canBeBuilt(grid: Grid): boolean {
@@ -55,25 +46,31 @@ export class Factory extends IndustrialFacility {
     }
 }
 
-/* MAKE LATER
 export class Warehouse extends IndustrialFacility {
     constructor(x: number, y: number) {
+        super(x, y, 10000000, 10, "Warehouse");
     }
 
     public calcMonthlyRevenue(): number {
-        if (!this.hasPower) return 0;
+        return 0;
     }
 
     public calcMaintenanceCost(): number {
+        return 5000000;
     }
 
     public calcMonthlyPollution(): number {
+        return 0;
     }
 
     public canBeBuilt(grid: Grid): boolean {
+        return this.isNearPowerPlant(grid);
+    }
+
+    public isBoostingFactory(grid: Grid): boolean {
+        return grid.hasFacilityTypeInRadius(this.x, this.y, 5, "Factory");
     }
 }
-*/
 
 export class EnvironmentalFacility extends IndustrialFacility {
     private readonly _pollutionReductionRadius: number = 10;
