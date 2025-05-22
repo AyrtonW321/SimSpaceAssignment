@@ -1,12 +1,15 @@
 import { Grid } from "./gridClass.js";
 import { Residence, LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass.js";
 import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass.js";
-import { IndustrialFacility, Factory, EnvironmentalFacility, } from "./industrialClass";
+import { IndustrialFacility, Factory, EnvironmentalFacility, } from "./industrialClass.js";
 import { Warehouse } from "./industrialClass.js";
 import { Commercials, Store, Restaurant, Office } from "./commercialsClass.js";
 import { PlanetaryDefense } from "./planetaryDefense.js";
+// Canvas setup
+const canvas = document.getElementById("gridCanvas");
+const ctx = canvas.getContext("2d");
 export class Planet {
-    constructor(rows, col) {
+    constructor(rows, columns) {
         this._usedCoords = [];
         this._buildingsBuilt = 0;
         this._userMoney = 5000000000;
@@ -18,8 +21,27 @@ export class Planet {
         this._totalPowerGenerated = 0;
         this._totalPowerUsed = 0;
         this._monthlyBalance = 0;
-        this._grid = new Grid(rows, col);
-        this._maxBuildings = this._grid.rows * this._grid.columns;
+        this._gridSquares = [];
+        // Initialize the grid using the Grid class
+        this._grid = new Grid(rows, columns);
+        this._maxBuildings = rows * columns;
+        canvas.width = rows * 20;
+        canvas.height = columns * 20;
+        this._squareSize = canvas.width / rows;
+        this.initializeGridSquares();
+    }
+    initializeGridSquares() {
+        // Create grid squares based on the Grid class dimensions
+        for (let i = 0; i < this._grid.rows; i++) {
+            for (let j = 0; j < this._grid.columns; j++) {
+                this._gridSquares.push({
+                    x: i * this._squareSize,
+                    y: j * this._squareSize,
+                    row: i,
+                    col: j,
+                });
+            }
+        }
     }
     // Getters
     get grid() {
@@ -58,6 +80,95 @@ export class Planet {
     get monthlyBalance() {
         return this._monthlyBalance;
     }
+    // Drawing methods
+    drawGrid() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw grid squares using the Grid class data
+        for (const square of this._gridSquares) {
+            const facility = this._grid.getFacility(square.row, square.col);
+            ctx.fillStyle = facility ? this.getFacilityColor(facility) : "#ebebeb";
+            ctx.strokeStyle = "#CCC";
+            ctx.fillRect(square.x, square.y, this._squareSize, this._squareSize);
+            ctx.strokeRect(square.x, square.y, this._squareSize, this._squareSize);
+            // Draw facility image if available
+            if (facility) {
+                this.drawFacilityImage(facility, square.x, square.y);
+            }
+        }
+        this.updateGameInfo();
+    }
+    getFacilityColor(facility) {
+        if (facility.typeOf.includes("EmergencyServices") ||
+            facility.typeOf.includes("EducationCenter") ||
+            facility.typeOf.includes("MedicalCenter") ||
+            facility.typeOf.includes("GovernmentFacility") ||
+            facility.typeOf.includes("PowerPlant")) {
+            return "#4CAF50"; // Green for essential
+        }
+        else if (facility.typeOf.includes("Residence")) {
+            return "#FFC107"; // Yellow for residential
+        }
+        else if (facility.typeOf.includes("Factory") ||
+            facility.typeOf.includes("EnvironmentalFacility")) {
+            return "#F44336"; // Red for industrial
+        }
+        else if (facility.typeOf.includes("PlanetaryDefense")) {
+            return "#2196F3"; // Blue for defense
+        }
+        else if (facility.typeOf.includes("Store") ||
+            facility.typeOf.includes("Restaurant") ||
+            facility.typeOf.includes("Office")) {
+            return "#9C27B0"; // Purple for commercial
+        }
+        return "#ebebeb"; // Default color
+    }
+    drawFacilityImage(facility, x, y) {
+        const type = this.getBuildingType(facility);
+        const buildingOption = this.getBuildingOption(facility, type);
+        if (buildingOption) {
+            const img = new Image();
+            img.src = `./Imgs/${type.toLowerCase()}/${buildingOption.image}`;
+            img.onload = () => {
+                ctx.drawImage(img, x, y, this._squareSize, this._squareSize);
+            };
+        }
+    }
+    getBuildingType(facility) {
+        if (facility.typeOf.includes("EmergencyServices") ||
+            facility.typeOf.includes("EducationCenter") ||
+            facility.typeOf.includes("MedicalCenter") ||
+            facility.typeOf.includes("GovernmentFacility") ||
+            facility.typeOf.includes("PowerPlant")) {
+            return "essential";
+        }
+        else if (facility.typeOf.includes("Residence")) {
+            return "residential";
+        }
+        else if (facility.typeOf.includes("Factory") ||
+            facility.typeOf.includes("EnvironmentalFacility")) {
+            return "industrial";
+        }
+        else if (facility.typeOf.includes("PlanetaryDefense")) {
+            return "defense";
+        }
+        else if (facility.typeOf.includes("Store") ||
+            facility.typeOf.includes("Restaurant") ||
+            facility.typeOf.includes("Office")) {
+            return "commercial";
+        }
+        return "essential"; // Default fallback
+    }
+    getBuildingOption(facility, type) {
+        const allBuildings = Object.values(buildings).flat();
+        return allBuildings.find(b => facility instanceof b.constructor(0, 0).constructor) || null;
+    }
+    updateGameInfo() {
+        document.getElementById("timeDisplay").textContent = this._currentTime.toString();
+        document.getElementById("moneyDisplay").textContent = this._userMoney.toLocaleString();
+        document.getElementById("populationDisplay").textContent = this._totalPopulation.toLocaleString();
+        document.getElementById("scoreDisplay").textContent = this.calculateScore().toLocaleString();
+    }
+    // Game logic methods
     calculateMonthlyUpdates() {
         this._currentTime++;
         this.updatePlanetaryDefenseStatus();
@@ -72,6 +183,7 @@ export class Planet {
         this.processFacilities(allFacilities);
         this.applyEnvironmentalReductions(allFacilities);
         this.finalizeMonthlyUpdates();
+        this.drawGrid();
     }
     updatePlanetaryDefenseStatus() {
         this._hasPlanetaryDefense =
@@ -237,12 +349,6 @@ export class Planet {
     }
     checkForDisasters() {
         if (Math.random() < 0.01) {
-            // asteroid
-            this._isGameOver = true;
-            alert("Game over. Your final score: " + this.calculateScore());
-        }
-        if (Math.random() < 0.01) {
-            // alien
             this._isGameOver = true;
             alert("Game over. Your final score: " + this.calculateScore());
         }
@@ -322,5 +428,117 @@ export class Planet {
         this._usedCoords.push([facility.x, facility.y]);
         return this._grid.addFacility(facility, facility.x, facility.y);
     }
+    // Canvas interaction
+    handleCanvasClick(event) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        const clickedSquare = this._gridSquares.find((square) => mouseX >= square.x &&
+            mouseX <= square.x + this._squareSize &&
+            mouseY >= square.y &&
+            mouseY <= square.y + this._squareSize);
+        if (clickedSquare) {
+            // You'll need to implement building selection logic here
+            // Similar to the original user.ts click handler
+        }
+    }
 }
+const buildings = {
+    essential: [
+        {
+            name: "Emergency Services",
+            image: "police.png",
+            constructor: (x, y) => new EmergencyServices(x, y),
+            cost: 100000000,
+        },
+        {
+            name: "Education Center",
+            image: "school.png",
+            constructor: (x, y) => new EducationCenter(x, y),
+            cost: 500000000,
+        },
+        {
+            name: "Medical Center",
+            image: "hospital.png",
+            constructor: (x, y) => new MedicalCenter(x, y),
+            cost: 1000000000,
+        },
+        {
+            name: "Government Facility",
+            image: "government.png",
+            constructor: (x, y) => new GovernmentFacility(x, y),
+            cost: 100000000,
+        },
+        {
+            name: "Power Plant",
+            image: "powerplant.png",
+            constructor: (x, y) => new PowerPlant(x, y),
+            cost: 500000000,
+        },
+    ],
+    residential: [
+        {
+            name: "Luxury Residence",
+            image: "luxury.png",
+            constructor: (x, y) => new LuxuryResidence(x, y),
+            cost: 1000000000,
+        },
+        {
+            name: "Comfortable Residence",
+            image: "comfortable.png",
+            constructor: (x, y) => new ComfortableResidence(x, y),
+            cost: 500000000,
+        },
+        {
+            name: "Affordable Residence",
+            image: "affordable.png",
+            constructor: (x, y) => new AffordableResidence(x, y),
+            cost: 50000000,
+        },
+    ],
+    industrial: [
+        {
+            name: "Factory",
+            image: "factory.png",
+            constructor: (x, y) => new Factory(x, y),
+            cost: 50000000,
+        },
+        {
+            name: "Environmental Facility",
+            image: "environmental.png",
+            constructor: (x, y) => new EnvironmentalFacility(x, y),
+            cost: 200000000,
+        },
+    ],
+    commercial: [
+        {
+            name: "Store",
+            image: "store.png",
+            constructor: (x, y) => new Store(x, y),
+            cost: 2000000,
+        },
+        {
+            name: "Restaurant",
+            image: "restaurant.png",
+            constructor: (x, y) => new Restaurant(x, y),
+            cost: 250000,
+        },
+        {
+            name: "Office",
+            image: "office.png",
+            constructor: (x, y) => new Office(x, y),
+            cost: 3000000,
+        },
+    ],
+    defense: [
+        {
+            name: "Planetary Defense",
+            image: "shield.png",
+            constructor: (x, y) => new PlanetaryDefense(x, y),
+            cost: 1000000000000,
+        },
+    ],
+};
+const planet = new Planet(50, 50);
+canvas.addEventListener("click", (event) => planet.handleCanvasClick(event));
 //# sourceMappingURL=planetClass.js.map
