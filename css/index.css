@@ -150,3 +150,14 @@ body {
   font-size: 13px;
   color: #555;
 }
+
+.descriptionContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.descriptionContainer p {
+    margin: 0;
+    font-weight: bold; 
+}

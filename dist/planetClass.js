@@ -1,13 +1,11 @@
 import { Grid } from "./gridClass.js";
 import { Residence, LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass.js";
 import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass.js";
-import { IndustrialFacility, Factory, EnvironmentalFacility, } from "./industrialClass";
-import { Warehouse } from "./industrialClass.js";
+import { IndustrialFacility, Factory, EnvironmentalFacility, Warehouse, } from "./industrialClass.js";
 import { Commercials, Store, Restaurant, Office } from "./commercialsClass.js";
 import { PlanetaryDefense } from "./planetaryDefense.js";
 export class Planet {
     constructor(rows, col) {
-        this._usedCoords = [];
         this._buildingsBuilt = 0;
         this._userMoney = 5000000000;
         this._currentTime = 0;
@@ -24,9 +22,6 @@ export class Planet {
     // Getters
     get grid() {
         return this._grid;
-    }
-    get usedCoords() {
-        return this._usedCoords;
     }
     get buildingsBuilt() {
         return this._buildingsBuilt;
@@ -51,6 +46,12 @@ export class Planet {
     }
     get isGameOver() {
         return this._isGameOver;
+    }
+    get totalPowerGenerated() {
+        return this._totalPowerGenerated;
+    }
+    get totalPowerUsed() {
+        return this._totalPowerUsed;
     }
     get powerBalance() {
         return this._totalPowerGenerated - this._totalPowerUsed;
@@ -247,6 +248,9 @@ export class Planet {
             alert("Game over. Your final score: " + this.calculateScore());
         }
     }
+    decreaseBuildingCount(value) {
+        this._buildingsBuilt = Math.max(0, this._buildingsBuilt - value);
+    }
     // Building methods
     canAfford(cost) {
         return this._userMoney >= cost;
@@ -309,17 +313,19 @@ export class Planet {
         }
         if (facility instanceof Residence) {
             if (!facility.canBeBuilt(this._grid)) {
+                console.log("Failed residential requirements at", facility.x, facility.y);
+                console.log("Nearby facilities:", this._grid.getFacilityInRadius(facility.x, facility.y, 5));
                 return false;
             }
         }
         if (facility instanceof IndustrialFacility) {
             if (!facility.canBeBuilt(this._grid)) {
+                console.log("Missing Industrial Requirments");
                 return false;
             }
         }
         this._userMoney -= cost;
         this._buildingsBuilt++;
-        this._usedCoords.push([facility.x, facility.y]);
         return this._grid.addFacility(facility, facility.x, facility.y);
     }
 }

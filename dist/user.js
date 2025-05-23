@@ -1,6 +1,6 @@
 import { Grid } from "./gridClass.js";
 import { EmergencyServices, EducationCenter, MedicalCenter, GovernmentFacility, PowerPlant, } from "./essentialsClass.js";
-import { Factory, EnvironmentalFacility } from "./industrialClass.js";
+import { Factory, EnvironmentalFacility, Warehouse } from "./industrialClass.js";
 import { LuxuryResidence, ComfortableResidence, AffordableResidence, } from "./residenceClass.js";
 import { Office, Restaurant, Store } from "./commercialsClass.js";
 import { PlanetaryDefense } from "./planetaryDefense.js";
@@ -96,6 +96,12 @@ const buildings = {
             constructor: (x, y) => new EnvironmentalFacility(x, y),
             cost: 200000000,
         },
+        {
+            name: "Warehouse",
+            image: "warehouse.png",
+            constructor: (x, y) => new Warehouse(x, y),
+            cost: 100000000,
+        },
     ],
     commercial: [
         {
@@ -158,7 +164,8 @@ function getFacilityColor(facility) {
         return "#FFC107"; // Yellow for residential
     }
     else if (facility.typeOf.includes("Factory") ||
-        facility.typeOf.includes("EnvironmentalFacility")) {
+        facility.typeOf.includes("EnvironmentalFacility") ||
+        facility.typeOf.includes("Warehouse")) {
         return "#F44336"; // Red for industrial
     }
     else if (facility.typeOf.includes("PlanetaryDefense")) {
@@ -200,7 +207,8 @@ function getBuildingType(facility) {
         return "residential";
     }
     else if (facility.typeOf.includes("Factory") ||
-        facility.typeOf.includes("EnvironmentalFacility")) {
+        facility.typeOf.includes("EnvironmentalFacility") ||
+        facility.typeOf.includes("Warehouse")) {
         return "industrial";
     }
     else if (facility.typeOf.includes("PlanetaryDefense")) {

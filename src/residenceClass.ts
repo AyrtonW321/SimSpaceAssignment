@@ -31,7 +31,7 @@ export abstract class Residence extends Facility {
             "MedicalCenter",
             "EmergencyServices",
             "GovernmentFacility",
-            "EnvironmentalFacility",
+            "PowerPlant",
         ];
         return essentialServices.every((service) =>
             grid.hasFacilityTypeInRadius(this.x, this.y, 8, service)
