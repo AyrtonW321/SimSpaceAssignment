@@ -43,7 +43,7 @@ const buildingImages = {
 // canvas setup
 function setupCanvas() {
     // use only 90% of the given space, looks less crowded
-    const size = Math.min(window.innerWidth * 0.9, window.innerHeight * 0.9);
+    const size = Math.min(window.innerWidth * 0.87, window.innerHeight * 0.87);
     canvas.width = size;
     canvas.height = size;
 }
