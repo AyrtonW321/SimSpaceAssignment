@@ -241,12 +241,11 @@ h1 {
 }
 
 #stats-content.expanded {
-    max-height: 500px; /* Adjust based on content height */
+    max-height: 500px;
     padding-top: 10px;
     padding-bottom: 5px;
 }
 
-/* Building Selector Tooltips */
 .building-option {
     position: relative;
     display: flex;
@@ -315,7 +314,6 @@ h1 {
     opacity: 1;
 }
 
-/* Ensure tooltips don't overlap with other elements */
 .building-options {
     position: relative;
     z-index: 1;
@@ -347,8 +345,7 @@ h1 {
     background-color: #4caf50;
 }
 
-/* Help Button Styles */
-#help-button {
+=#help-button {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -373,8 +370,7 @@ h1 {
     transform: scale(1.1);
 }
 
-/* Help Modal Styles */
-#help-modal {
+#help-display {
     position: fixed;
     top: 0;
     left: 0;

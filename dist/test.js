@@ -14,6 +14,13 @@ let hoverCol = null;
 let isMouseInCanvas = false;
 // currently selected building
 let currentSelectedBuilding = null;
+// variables to store the game speed
+// game speed variable, 0 is paused, 1 is normal, 2 is double speed
+let gameSpeed = 1;
+// game loop just to hold the set interval
+let gameLoopInterval;
+// 10 seconds per month (normal speed)
+const baseTickSpeed = 10000;
 // building category colours
 const buildingColours = {
     essential: "#4CAF50",
@@ -270,11 +277,13 @@ function placeBuilding(buildingType, row, col) {
             console.error("Unknown building type:", buildingType);
             return;
     }
+    // if the building succeeded, draws it on the grid, else, alert why it didn't work
     if (success) {
-        drawGrid(); // Redraw the grid with the new building
+        // redraw the grid with the new building 
+        drawGrid();
     }
     else {
-        // Check why placement failed
+        // display why the placement failed
         if (USER.grid.getFacility(row, col) !== null) {
             alert("There's already a building here!");
             console.log(USER.grid);
@@ -284,8 +293,9 @@ function placeBuilding(buildingType, row, col) {
         }
     }
 }
+// update the stats UI dropdown
 function updateStatsUI() {
-    // Get DOM elements
+    // constants for all the HTML elements
     const buildingsStat = document.getElementById("buildings-stat");
     const moneyStat = document.getElementById("money-stat");
     const timeStat = document.getElementById("time-stat");
@@ -295,7 +305,7 @@ function updateStatsUI() {
     const powerUsedStat = document.getElementById("power-used-stat");
     const powerBalanceStat = document.getElementById("power-balance-stat");
     const scoreStat = document.getElementById("score-stat");
-    // Update stats
+    // update stats
     buildingsStat.textContent = `${USER.buildingsBuilt}/${USER.maxBuildings}`;
     moneyStat.textContent = `$${USER.userMoney.toLocaleString()}`;
     timeStat.textContent = `Month ${USER.currentTime}`;
@@ -303,69 +313,79 @@ function updateStatsUI() {
     pollutionStat.textContent = USER.totalPollution.toLocaleString();
     powerGenStat.textContent = USER.totalPowerGenerated.toLocaleString();
     powerUsedStat.textContent = USER.totalPowerUsed.toLocaleString();
-    // Power balance with color coding
+    // power balance colour coding
     const powerBalance = USER.powerBalance;
     powerBalanceStat.textContent = `${powerBalance >= 0 ? "+" : ""}${powerBalance.toLocaleString()}`;
     powerBalanceStat.className =
         powerBalance >= 0 ? "stat-value positive" : "stat-value negative";
     scoreStat.textContent = USER.calculateScore().toLocaleString();
 }
-// Add this to your initialization code
+// set up the stats UI, defualt to collapsed
 function setupStatsToggle() {
     const statsHeader = document.getElementById("stats-header");
     const statsContent = document.getElementById("stats-content");
+    // if clicked, toggle between collapsed and expanded 
     statsHeader.addEventListener("click", () => {
         statsContent.classList.toggle("collapsed");
         statsContent.classList.toggle("expanded");
     });
 }
-// Add these variables at the top with your other game state variables
-let gameSpeed = 1; // 0 = paused, 1 = normal, 2 = fast
-let gameLoopInterval;
-const BASE_TICK_TIME = 10000; // 10 seconds per month (normal speed)
-// Modify your game loop initialization
+// game start loop
 function startGameLoop() {
-    clearInterval(gameLoopInterval); // Clear any existing loop
+    // clear any existing loop the game is running on
+    clearInterval(gameLoopInterval);
+    // dont start the loop if the game is paused
     if (gameSpeed === 0)
-        return; // Don't start if paused
-    const tickTime = gameSpeed === 2 ? BASE_TICK_TIME / 2 : BASE_TICK_TIME;
+        return;
+    // shift between 5 second/month or 10 second/ month
+    const tickTime = gameSpeed === 2 ? baseTickSpeed / 2 : baseTickSpeed;
+    // game loop run
     gameLoopInterval = window.setInterval(() => {
+        // calculate the monthly update
         USER.calculateMonthlyUpdates();
+        // reupdate the grid
         drawGrid();
+        // if the game is over, clear the gameloop
         if (USER.isGameOver)
             clearInterval(gameLoopInterval);
     }, tickTime);
 }
-// Add these control functions
+// set up the game controls
 function setupGameControls() {
+    // constants for the HTML
     const pauseBtn = document.getElementById('pause-btn');
     const playBtn = document.getElementById('play-btn');
     const fastForwardBtn = document.getElementById('fast-forward-btn');
+    // if clicked on pause button, set game speed to 0 and update the buttons
     pauseBtn.addEventListener('click', () => {
         gameSpeed = 0;
         clearInterval(gameLoopInterval);
         updateControlButtons();
     });
+    // if clicked on play button, set game speed to 1 and update the buttoms
     playBtn.addEventListener('click', () => {
         gameSpeed = 1;
         startGameLoop();
         updateControlButtons();
     });
+    // if clicked on fast forward button, set game speed to 2 and update the buttoms
     fastForwardBtn.addEventListener('click', () => {
         gameSpeed = 2;
         startGameLoop();
         updateControlButtons();
     });
 }
+// update the colour of the control buttons
 function updateControlButtons() {
+    // constants for the buttons
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
     const fastForwardBtn = document.getElementById('fast-forward-btn');
-    // Reset all buttons
+    // reset all the buttons
     playBtn.classList.remove('active');
     pauseBtn.classList.remove('active');
     fastForwardBtn.classList.remove('active');
-    // Activate current speed
+    /// set the colours based on game speed
     if (gameSpeed === 0) {
         pauseBtn.classList.add('active');
     }
@@ -376,52 +396,58 @@ function updateControlButtons() {
         fastForwardBtn.classList.add('active');
     }
 }
-// Add this near the top with other event listeners
+//
 canvas.addEventListener('contextmenu', (event) => {
-    event.preventDefault(); // Prevent the default context menu
+    // get the current rectangle the user is on    
     const rect = canvas.getBoundingClientRect();
+    // constants for the mouse location 
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
+    // calculating the grid box the user is on
     const col = Math.floor(mouseX / (canvas.width / COLS));
     const row = Math.floor(mouseY / (canvas.height / ROWS));
+    // get the facility at the row/ col
     const facility = USER.grid.getFacility(row, col);
+    // if the faciliy isn't null, prompt user
     if (facility) {
+        // if the user confirms they want to deleat the building
         if (confirm(`Are you sure you want to delete this ${facility.typeOf}?`)) {
-            // Remove the facility from the grid
+            // remove the facility from the grid
             USER.grid.removeFacility(row, col);
-            // Decrement buildings count
+            // decrease buildings count
             USER.decreaseBuildingCount(1);
-            // Redraw the grid
+            // redraw the grid
             drawGrid();
         }
     }
 });
-// Help Button Functionality
+// help button show and hide
 function setupHelpButton() {
+    // constants for the help button
     const helpButton = document.getElementById('help-button');
-    const helpModal = document.getElementById('help-modal');
+    const helpDisplay = document.getElementById('help-display');
     const closeHelp = document.getElementById('close-help');
+    // if clicked, show the help display
     helpButton.addEventListener('click', () => {
-        helpModal.classList.remove('hidden');
+        helpDisplay.classList.remove('hidden');
     });
+    // if clicked, close the help display
     closeHelp.addEventListener('click', () => {
-        helpModal.classList.add('hidden');
+        helpDisplay.classList.add('hidden');
     });
-    // Close modal when clicking outside content
-    helpModal.addEventListener('click', (e) => {
-        if (e.target === helpModal) {
-            helpModal.classList.add('hidden');
+    // close the display when you click anywhere else
+    helpDisplay.addEventListener('click', (e) => {
+        if (e.target === helpDisplay) {
+            helpDisplay.classList.add('hidden');
         }
     });
 }
-// Call this in your initialization section
-setupHelpButton();
-// Handle window resize
+// handles the resizing of the grid when the user changes window size
 window.addEventListener("resize", () => {
     setupCanvas();
     drawGrid();
 });
-// Initialize
+// initialize the required things
 setupCanvas();
 drawGrid();
 initializeBuildingMenu();
@@ -430,4 +456,5 @@ setupStatsToggle();
 setupGameControls();
 updateControlButtons();
 startGameLoop();
+setupHelpButton();
 //# sourceMappingURL=test.js.map
