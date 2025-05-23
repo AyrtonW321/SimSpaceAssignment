@@ -174,7 +174,7 @@ function initializeBuildingMenu() {
             this.style.backgroundColor = "#5d7fa3";
             // store the selected building
             currentSelectedBuilding = this.getAttribute("data-type");
-            // lgos the building (debugging purposes)
+            // logs the building (debugging purposes)
             console.log("Selected building:", currentSelectedBuilding);
         });
     });
