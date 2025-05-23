@@ -76,7 +76,7 @@ function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // draw canvas lines
-    ctx.strokeStyle = "#ddd";
+    ctx.strokeStyle = "#939393";
     ctx.lineWidth = 1;
 
     // vertical lines
