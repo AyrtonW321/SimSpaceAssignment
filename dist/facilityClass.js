@@ -1,4 +1,16 @@
+/**
+ * Abstract base class for all facility types
+ * Defines common properties and methods for all facilities
+ */
 export class Facility {
+    /**
+     * Constructs a new Facility
+     * @param x x-coordinate on grid
+     * @param y y-coordinate on grid
+     * @param buildCost construction cost
+     * @param powerConsumption power required to operate
+     * @param typeOf type identifier string
+     */
     constructor(x, y, buildCost, powerConsumption, typeOf) {
         this._x = 0;
         this._y = 0;
@@ -12,6 +24,7 @@ export class Facility {
         this._powerConsumption = powerConsumption;
         this._typeOf = typeOf;
     }
+    // Getters for all properties
     get x() {
         return this._x;
     }
@@ -33,9 +46,16 @@ export class Facility {
     get hasPower() {
         return this._hasPower;
     }
+    /**
+     * Increments the months since the facility was built
+     */
     incrementMonths() {
         this._monthsSinceBuilt++;
     }
+    /**
+     * Updates the power status of the facility
+     * @param hasPower whether the facility has power
+     */
     updatePowerStatus(hasPower) {
         this._hasPower = hasPower;
     }

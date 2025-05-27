@@ -1,3 +1,4 @@
+// File not used in the final implementation, but kept for reference
 interface Shape {
     id: number;
     type: 'rectangle' | 'circle' | 'triangle';

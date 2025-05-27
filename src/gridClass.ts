@@ -1,13 +1,20 @@
+// import the facility class
 import { Facility } from "./facilityClass.js";
 
-// Grid doesn't actually draw the grid
-// It only makes the framework for it
-
+/**
+ * Grid class that manages the game grid and facility placement
+ * Note: This class doesn't handle drawing the grid, only the logical framework
+ */
 export class Grid {
     private _cells: Facility[][] | null[][];
     private _columns: number;
     private _rows: number;
 
+    /**
+     * Constructs a new Grid
+     * @param rows number of rows in grid
+     * @param columns number of columns in grid
+     */
     constructor(rows: number, columns: number) {
         this._rows = this.rowsCheck(rows);
         this._columns = this.columnCheck(columns);
@@ -16,6 +23,11 @@ export class Grid {
             .map(() => new Array(columns).fill(null));
     }
 
+    /**
+     * Validates column index
+     * @param col column index to check
+     * @returns validated column index or -1 if invalid
+     */
     private columnCheck(col: number): number {
         if (col < 0 || col > this._columns - 1) {
             return -1;
@@ -23,6 +35,11 @@ export class Grid {
         return col;
     }
 
+    /**
+     * Validates row index
+     * @param row row index to check
+     * @returns validated row index or -1 if invalid
+     */
     private rowsCheck(row: number): number {
         if (row < 0 || row > this._rows - 1) {
             return -1;
@@ -30,6 +47,13 @@ export class Grid {
         return row;
     }
 
+    /**
+     * Adds a facility to the grid
+     * @param facility facility to add
+     * @param rows row coordinate
+     * @param col column coordinate
+     * @returns true if facility was added successfully
+     */
     public addFacility(facility: Facility, rows: number, col: number): boolean {
         if (
             !this.validateCoordinates(rows, col) ||
@@ -48,6 +72,12 @@ export class Grid {
         return true;
     }
 
+    /**
+     * Removes a facility from the grid
+     * @param rows row coordinate
+     * @param col column coordinate
+     * @returns the removed facility or null if none existed
+     */
     public removeFacility(rows: number, col: number): Facility | null {
         if (
             !this.validateCoordinates(rows, col) ||
@@ -61,8 +91,12 @@ export class Grid {
         return removedFacility;
     }
 
-    // Utility functions
-
+    /**
+     * Validates grid coordinates
+     * @param rows row coordinate
+     * @param col column coordinate
+     * @returns true if coordinates are valid
+     */
     private validateCoordinates(rows: number, col: number): boolean {
         if (rows < 0 || rows >= this._rows || col < 0 || col >= this._columns) {
             return false;
@@ -70,6 +104,11 @@ export class Grid {
         return true;
     }
 
+    /**
+     * Counts facilities of a specific type
+     * @param type type string to count
+     * @returns number of matching facilities
+     */
     public countFacilities(type: string): number {
         let count = 0;
         for (let i = 0; i < this._cells.length; i++) {
@@ -83,8 +122,13 @@ export class Grid {
         return count;
     }
 
-    // Getters Below
-
+    /**
+     * Gets facilities within a certain radius
+     * @param rows center row coordinate
+     * @param col center column coordinate
+     * @param radius search radius
+     * @returns array of facilities within radius
+     */
     public getFacilityInRadius(
         rows: number,
         col: number,
@@ -116,6 +160,14 @@ export class Grid {
         return facilities;
     }
 
+    /**
+     * Checks if a facility type exists within radius
+     * @param x center x coordinate
+     * @param y center y coordinate
+     * @param radius search radius
+     * @param type facility type to check for
+     * @returns true if at least one matching facility found
+     */
     public hasFacilityTypeInRadius(
         x: number,
         y: number,
@@ -127,6 +179,12 @@ export class Grid {
         );
     }
 
+    /**
+     * Gets facility at specific coordinates
+     * @param x x coordinate
+     * @param y y coordinate
+     * @returns facility or null if empty
+     */
     public getFacility(x: number, y: number): Facility | null {
         if (!this.validateCoordinates(x, y)) {
             return null;
@@ -134,10 +192,15 @@ export class Grid {
         return this._cells[x][y];
     }
 
+    /**
+     * Gets all facilities on grid
+     * @returns 2D array of all facilities
+     */
     public getAllFacilities(): Facility[][] | null[][] {
         return this._cells;
     }
 
+    // Getters for grid dimensions
     public get rows(): number {
         return this._rows;
     }
